@@ -13,6 +13,14 @@ import ImageViewer from '../components/ImageViewer';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
+const HEADER_HEIGHT = 65;
+const TABBAR_HEIGHT = 65;
+
+const HEADER_TITLE = ['Home', 'Inicio'];
+const TOPIC_TITLE = ['Choose a topic to begin', 'Escoge un tema para empezar'];
+const STARTOVER_LABEL = ['START OVER', 'REINICIAR'];
+const SEARCH_PLACEHOLDER = ['Search topics...', 'Busca temas...'];
+
 class QuestionScreen extends Component {
     // CONSTRUCTOR
     constructor(props) {
@@ -24,19 +32,14 @@ class QuestionScreen extends Component {
         }
     }
     
-    // LIFECYCLE METHODS
-    componentDidMount() {
-        this.props.setCurrent({});
-    }
-    
     // EVENT HANDLERS
-    setCurrentQuestion(link) {
-        this.props.setCurrent(_.isNil(link) ? {} : this.props.questions[link]);
+    setCurrentQuestion(next) {
+        this.props.setCurrent(_.isNil(next) ? {} : this.props.questions[next]);
     }
     
-    setRoot(link) {
-        this.setState({ currentRoot: link });
-        this.setCurrentQuestion(link);
+    setRoot(next) {
+        this.setState({ currentRoot: next });
+        this.setCurrentQuestion(next);
     }
     
     startOver() {
@@ -53,11 +56,11 @@ class QuestionScreen extends Component {
         
         return this.props.current.options.map((option) => {
             let button = (
-                <Card key={`${option.option[0]}`}>
+                <Card key={`${option.option[this.props.language]}`}>
                     <CardSection style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={{ width: cardWidth - 60, fontSize: 16 }}>{option.option[0]}</Text>
+                        <Text style={{ width: cardWidth - 60, fontSize: 16 }}>{option.option[this.props.language]}</Text>
                         {
-                            !_.isNil(option.link) ?
+                            !_.isNil(option.next) ?
                                 <Icon style={{ marginLeft: 10 }} name='navigate-next' size={20} color='#01579b'/>
                                 :
                                 <View/>
@@ -66,9 +69,9 @@ class QuestionScreen extends Component {
                 </Card>
             );
             
-            if (!_.isNil(option.link)) {
+            if (!_.isNil(option.next)) {
                 button = (
-                    <TouchableOpacity key={`${option.option[0]}-${option.link}`} onPress={() => this.setCurrentQuestion(option.link)}>
+                    <TouchableOpacity key={`${option.option[this.props.language]}-${option.next}`} onPress={() => this.setCurrentQuestion(option.next)}>
                         {button}
                     </TouchableOpacity>
                 )
@@ -83,10 +86,10 @@ class QuestionScreen extends Component {
         
         return ids.map((id) => {
             return (
-                <TouchableOpacity key={`${this.props.questions[id].subject[0]}`} onPress={() => this.setRoot(id)}>
+                <TouchableOpacity key={`${this.props.questions[id].subject[this.props.language]}`} onPress={() => this.setRoot(id)}>
                     <Card>
                         <CardSection style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={{ width: cardWidth - 60, fontSize: 16 }}>{this.props.questions[id].subject[0]}</Text>
+                            <Text style={{ width: cardWidth - 60, fontSize: 16 }}>{this.props.questions[id].subject[this.props.language]}</Text>
                             <Icon style={{ paddingLeft: 60 }} name='navigate-next' size={20} color='#01579b'/>
                         </CardSection>
                     </Card>
@@ -97,11 +100,12 @@ class QuestionScreen extends Component {
     
     // RENDER METHOD
     render() {
-        const { current } = this.props;
+        const { current, language, questions } = this.props;
         
-        const middleContentHeight = SCREEN_HEIGHT - 130;
+        const middleContentHeight = SCREEN_HEIGHT - HEADER_HEIGHT - TABBAR_HEIGHT;
         
         if (!_.isEmpty(current)) {
+            // ALGORITHM SCREENS
             return (
                 <View style={{ flex: 1, flexDirection: 'column' }}>
                     <View style={styles.headerStyle}>
@@ -116,21 +120,25 @@ class QuestionScreen extends Component {
                             }}
                             onPress={() => this.setCurrentQuestion(current.previous)}
                         />
-                        {(this.state.currentRoot && current.question[0] === this.props.questions[this.state.currentRoot].question[0]) ?
+                        {(this.state.currentRoot && current.question[language] === questions[this.state.currentRoot].question[language]) ?
                             <View /> :
                             <Text
                                 style={styles.startOverStyle}
                                 onPress={() => this.startOver()}
                             >
-                                START OVER
+                                {STARTOVER_LABEL[language]}
                             </Text>
                         }
                     </View>
                     <View style={{ height: middleContentHeight }}>
                         <View style={styles.titleStyle}>
-                            <Text style={styles.titleTextStyle}>{current.question[0]}</Text>
+                            <Text style={styles.titleTextStyle}>{current.question[language]}</Text>
                             {
-                                (!_.isNil(current.images) && _.size(current.images) !== 0) &&
+                                (!_.isNil(current.description) && _.size(current.description) > 0) &&
+                                <Text style={styles.descriptionStyle}>{current.description[language]}</Text>
+                            }
+                            {
+                                (!_.isNil(current.images) && _.size(current.images) > 0) &&
                                     <ImageViewer images={current.images} />
                             }
                         </View>
@@ -142,14 +150,15 @@ class QuestionScreen extends Component {
                 </View>
             );
         } else {
-            const topLevelQuestions = Object.keys(this.props.questions).filter((key) => {
-                return this.props.questions[key].previous === null && this.props.questions[key].subject[0].toLowerCase().includes(this.state.searchTerm.trim().toLowerCase());
+            // HOME SCREEN
+            const topLevelQuestions = Object.keys(questions).filter((key) => {
+                return questions[key].previous === null && questions[key].subject[language].toLowerCase().includes(this.state.searchTerm.trim().toLowerCase());
             });
             
             return (
                 <View style={{ flex: 1 }}>
                     <View style={styles.mainHeaderStyle}>
-                        <Text style={styles.headerTitleStyle}>Home</Text>
+                        <Text style={styles.headerTitleStyle}>{HEADER_TITLE[language]}</Text>
                     </View>
                     <View style={{ height: middleContentHeight }}>
                         <View>
@@ -158,11 +167,11 @@ class QuestionScreen extends Component {
                                 containerStyle={styles.searchBarContainerStyle}
                                 inputStyle={styles.searchBarInputStyle}
                                 onChangeText={(text) => this.onChangeSearchTerm(text)}
-                                placeholder='Type Here...'
+                                placeholder={SEARCH_PLACEHOLDER[language]}
                             />
                         </View>
                         <View style={styles.titleStyle}>
-                            <Text style={styles.titleTextStyle}>Choose a question to begin</Text>
+                            <Text style={styles.titleTextStyle}>{TOPIC_TITLE[language]}</Text>
                         </View>
                         <ScrollView>
                             {this.renderTopLevelQuestions(topLevelQuestions)}
@@ -182,7 +191,7 @@ const styles = {
         right: 0,
         alignSelf: 'stretch',
         alignItems: 'center',
-        height: 64,
+        height: HEADER_HEIGHT,
         backgroundColor: '#01579b',
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -200,7 +209,7 @@ const styles = {
         right: 0,
         alignSelf: 'stretch',
         alignItems: 'center',
-        height: 64,
+        height: HEADER_HEIGHT,
         backgroundColor: '#01579b',
         flexDirection: 'row',
         justifyContent: 'center'
@@ -209,24 +218,37 @@ const styles = {
         fontSize: 22,
         color: 'white',
         marginRight: 10,
-        marginTop: 25,
+        paddingTop: 25,
         fontWeight: 'bold'
     },
     titleStyle: {
         width: SCREEN_WIDTH,
-        padding: 10
+        paddingLeft: 15,
+        paddingRight: 15
     },
     titleTextStyle: {
+        textAlign: 'center',
         color: '#01579b',
         fontWeight: '800',
         fontSize: 25,
-        padding: 10
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 10,
+        paddingBottom: 5
+    },
+    descriptionStyle: {
+        color: '#45494f',
+        fontSize: 14,
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingBottom: 10
     },
     startOverStyle: {
-        fontSize: 18,
+        fontSize: 16,
+        fontWeight: 'bold',
         color: 'white',
         marginRight: 10,
-        marginTop: 25
+        paddingTop: 25
     },
     searchBarContainerStyle: {
         backgroundColor: '#01579b'
@@ -236,10 +258,11 @@ const styles = {
     }
 };
 
-function mapStateToProps({ questions, current }) {
+function mapStateToProps({ questions, current, language }) {
     return {
         questions,
-        current
+        current,
+        language
     };
 }
 

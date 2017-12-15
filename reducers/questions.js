@@ -1,16 +1,16 @@
 export default {
     '01': {
-        question: ['Is there any abnormal attenuation?', ''],
-        subject: ['Abnormal attenuation on head CT'],
-        definition: "",
+        question: ['Is there any abnormal attenuation?', 'TEST'],
+        subject: ['Abnormal attenuation on head CT', 'TEST'],
+        description: ['Abnormal attenuation happens when guere guere guere and when there is some guere guere guere.', 'TEST'],
         options: [
             {
                 option: ['Yes', 'Si'],
-                link: '02'
+                next: '02'
             },
             {
                 option: ['No', 'No'],
-                link: '12'
+                next: '12'
             }
         ],
         tags: ['abnormal', 'attenuation'],
@@ -18,15 +18,15 @@ export default {
         previous: null
     },
     '02': {
-        question: ['Is the abnormality dark or bright?', ''],
+        question: ['Is the abnormality dark or bright?', 'Es la anormalidad oscura o brillante?'],
         options: [
             {
-                option: ['Dark', ''],
-                link: '03'
+                option: ['Dark', 'Oscura'],
+                next: '03'
             },
             {
-                option: ['Bright', ''],
-                link: '08'
+                option: ['Bright', 'Brillante'],
+                next: '08'
             }
         ],
         tags: ['abnormal', 'attenuation'],
@@ -38,15 +38,15 @@ export default {
         options: [
             {
                 option: ['Mass Effect', ''],
-                link: '04'
+                next: '04'
             },
             {
                 option: ['Volume Loss', ''],
-                link: '06'
+                next: '06'
             },
             {
                 option: ['Nothing', ''],
-                link: '07'
+                next: '07'
             }
         ],
         tags: ['abnormal', 'attenuation'],
@@ -58,15 +58,15 @@ export default {
         options: [
             {
                 option: ['Edema', ''],
-                link: '05'
+                next: '05'
             },
             {
                 option: ['Mass', ''],
-                link: null
+                next: null
             },
             {
                 option: ['Cyst'],
-                link: null
+                next: null
             }
         ],
         tags: ['abnormal', 'attenuation'],
@@ -78,15 +78,15 @@ export default {
         options: [
             {
                 option: ['Vasogenic', ''],
-                link: null
+                next: null
             },
             {
                 option: ['Cytotoxic', ''],
-                link: null
+                next: null
             },
             {
                 option: ['Transependymal/Interstitial', ''],
-                link: null
+                next: null
             }
         ],
         tags: ['abnormal', 'attenuation'],
@@ -98,7 +98,7 @@ export default {
         options: [
             {
                 option: ['Encephalomalacia', ''],
-                link: null
+                next: null
             }
         ],
         tags: ['abnormal', 'attenuation'],
@@ -110,11 +110,11 @@ export default {
         options: [
             {
                 option: ['It may be due to small size.', ''],
-                link: null
+                next: null
             },
             {
                 option: ['Order MR for further characterization.', ''],
-                link: null
+                next: null
             }
         ],
         tags: ['abnormal', 'attenuation'],
@@ -126,15 +126,15 @@ export default {
         options: [
             {
                 option: ['It\'s metal.', ''],
-                link: null
+                next: null
             },
             {
                 option: ['It\'s Ca++/Minerals.', ''],
-                link: null
+                next: null
             },
             {
                 option: ['It\'s blood.', ''],
-                link: '09'
+                next: '09'
             }
         ],
         tags: ['abnormal', 'attenuation'],
@@ -146,11 +146,11 @@ export default {
         options: [
             {
                 option: ['Extraaxial', ''],
-                link: '10'
+                next: '10'
             },
             {
                 option: ['Intraaxial.', ''],
-                link: '11'
+                next: '11'
             }
         ],
         tags: ['abnormal', 'attenuation'],
@@ -162,15 +162,15 @@ export default {
         options: [
             {
                 option: ['Epidural', ''],
-                link: null
+                next: null
             },
             {
                 option: ['Subdural', ''],
-                link: null
+                next: null
             },
             {
                 option: ['Subarachnoid', ''],
-                link: null
+                next: null
             }
         ],
         tags: ['abnormal', 'attenuation'],
@@ -182,11 +182,11 @@ export default {
         options: [
             {
                 option: ['Parenchymal', ''],
-                link: null
+                next: null
             },
             {
                 option: ['Intraventricular', ''],
-                link: null
+                next: null
             }
         ],
         tags: ['abnormal', 'attenuation'],
@@ -198,11 +198,11 @@ export default {
         options: [
             {
                 option: ['Big and gross looking', ''],
-                link: null
+                next: null
             },
             {
                 option: ['Big and funny looking', ''],
-                link: null
+                next: null
             }
         ],
         tags: ['abnormal', 'attenuation'],
@@ -210,12 +210,12 @@ export default {
         previous: '09'
     },
     'pediatric-myelination': {
-        question: ['Begin with your T1 sequence. Myelination on T1 appears bright relative to grey matter.'],
-        subject: ['Pediatric myelination'],
+        question: ['Begin with your T1 sequence. Myelination on T1 appears bright relative to grey matter.', 'TEST2'],
+        subject: ['Pediatric myelination', 'TEST2'],
         options: [
             {
-                option: ['Next'],
-                link: 'pediatric-myelination-01'
+                option: ['Next', 'Siguiente'],
+                next: 'pediatric-myelination-01'
             }
         ],
         tags: [],
@@ -227,11 +227,11 @@ export default {
         options: [
             {
                 option: ['Yes', 'Si'],
-                link: 'pediatric-myelination-02'
+                next: 'pediatric-myelination-02'
             },
             {
                 option: ['No', 'No'],
-                link: 'pediatric-myelination-preterm'
+                next: 'pediatric-myelination-preterm'
             }
         ],
         tags: [],
@@ -243,7 +243,7 @@ export default {
         options: [
             {
                 option: ['Preterm infant', ''],
-                link: null
+                next: null
             }
         ],
         tags: [],
@@ -255,11 +255,11 @@ export default {
         options: [
             {
                 option: ['Yes', 'Si'],
-                link: 'pediatric-myelination-03'
+                next: 'pediatric-myelination-03'
             },
             {
                 option: ['No', 'No'],
-                link: 'pediatric-myelination-preterm'
+                next: 'pediatric-myelination-preterm'
             }
         ],
         tags: [],
@@ -271,11 +271,11 @@ export default {
         options: [
             {
                 option: ['Yes', 'Si'],
-                link: 'pediatric-myelination-04'
+                next: 'pediatric-myelination-04'
             },
             {
                 option: ['No', 'No'],
-                link: 'pediatric-myelination-preterm'
+                next: 'pediatric-myelination-preterm'
             }
         ],
         tags: [],
@@ -287,11 +287,11 @@ export default {
         options: [
             {
                 option: ['Yes', 'Si'],
-                link: 'pediatric-myelination-05'
+                next: 'pediatric-myelination-05'
             },
             {
                 option: ['No', 'No'],
-                link: 'pediatric-myelination-preterm'
+                next: 'pediatric-myelination-preterm'
             }
         ],
         tags: [],
@@ -303,11 +303,11 @@ export default {
         options: [
             {
                 option: ['Yes', 'Si'],
-                link: 'pediatric-myelination-06'
+                next: 'pediatric-myelination-06'
             },
             {
                 option: ['No', 'No'],
-                link: 'pediatric-myelination-term'
+                next: 'pediatric-myelination-term'
             }
         ],
         tags: [],
@@ -319,7 +319,7 @@ export default {
         options: [
             {
                 option: ['Term infant', ''],
-                link: null
+                next: null
             }
         ],
         tags: [],
@@ -331,11 +331,11 @@ export default {
         options: [
             {
                 option: ['Yes', 'Si'],
-                link: 'pediatric-myelination-07'
+                next: 'pediatric-myelination-07'
             },
             {
                 option: ['No', 'No'],
-                link: 'pediatric-myelination-2-3'
+                next: 'pediatric-myelination-2-3'
             }
         ],
         tags: [],
@@ -347,7 +347,7 @@ export default {
         options: [
             {
                 option: ['Infant between 2-3 months of age', ''],
-                link: null
+                next: null
             }
         ],
         tags: [],
@@ -359,11 +359,11 @@ export default {
         options: [
             {
                 option: ['Yes', 'Si'],
-                link: 'pediatric-myelination-T2'
+                next: 'pediatric-myelination-T2'
             },
             {
                 option: ['No', 'No'],
-                link: 'pediatric-myelination-3-4'
+                next: 'pediatric-myelination-3-4'
             }
         ],
         tags: [],
@@ -375,7 +375,7 @@ export default {
         options: [
             {
                 option: ['Infant between 3-4 months of age', ''],
-                link: null
+                next: null
             }
         ],
         tags: [],
@@ -387,7 +387,7 @@ export default {
         options: [
             {
                 option: ['Next', ''],
-                link: 'pediatric-myelination-T2-01'
+                next: 'pediatric-myelination-T2-01'
             }
         ],
         tags: [],
@@ -399,11 +399,11 @@ export default {
         options: [
             {
                 option: ['Yes', 'Si'],
-                link: 'pediatric-myelination-T2-02'
+                next: 'pediatric-myelination-T2-02'
             },
             {
                 option: ['No', 'No'],
-                link: 'pediatric-myelination-4-6'
+                next: 'pediatric-myelination-4-6'
             }
         ],
         tags: [],
@@ -415,7 +415,7 @@ export default {
         options: [
             {
                 option: ['Infant between 4-6 months of age', ''],
-                link: null
+                next: null
             }
         ],
         tags: [],
@@ -427,11 +427,11 @@ export default {
         options: [
             {
                 option: ['Yes', 'Si'],
-                link: 'pediatric-myelination-T2-03'
+                next: 'pediatric-myelination-T2-03'
             },
             {
                 option: ['No', 'No'],
-                link: 'pediatric-myelination-5-8'
+                next: 'pediatric-myelination-5-8'
             }
         ],
         tags: [],
@@ -443,7 +443,7 @@ export default {
         options: [
             {
                 option: ['Infant between 5-8 months of age', ''],
-                link: null
+                next: null
             }
         ],
         tags: [],
@@ -455,11 +455,11 @@ export default {
         options: [
             {
                 option: ['Yes', 'Si'],
-                link: 'pediatric-myelination-14-18'
+                next: 'pediatric-myelination-14-18'
             },
             {
                 option: ['No', 'No'],
-                link: 'pediatric-myelination-7-11'
+                next: 'pediatric-myelination-7-11'
             }
         ],
         tags: [],
@@ -471,7 +471,7 @@ export default {
         options: [
             {
                 option: ['Infant between 7-11 months of age', ''],
-                link: null
+                next: null
             }
         ],
         tags: [],
@@ -483,7 +483,7 @@ export default {
         options: [
             {
                 option: ['Infant at least between 14-18 months of age', ''],
-                link: null
+                next: null
             }
         ],
         tags: [],

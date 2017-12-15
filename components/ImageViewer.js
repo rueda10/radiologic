@@ -70,7 +70,7 @@ class ImageViewer extends Component {
 
 const styles = {
     thumbnailStyle: {
-        height: 250,
+        height: 200,
         width: SCREEN_WIDTH - 20,
         resizeMode: 'contain'
     },

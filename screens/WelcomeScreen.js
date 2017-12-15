@@ -20,7 +20,7 @@ class WelcomeScreen extends Component {
                         <Button
                             raised
                             large
-                            title="LET'S GET STARTED"
+                            title="BEGIN / INICIAR"
                             backgroundColor='#01579b'
                             color='white'
                             fontWeight='bold'

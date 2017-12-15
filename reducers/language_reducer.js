@@ -1,6 +1,6 @@
-export default function(state = {}, action) {
+export default function(state = 0, action) {
     switch(action.type) {
-        case 'SET_CURRENT': {
+        case 'SET_LANGUAGE': {
             return action.payload;
         }
         default: {
