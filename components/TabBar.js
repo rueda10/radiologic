@@ -8,8 +8,10 @@ import { setCurrent, setLanguage } from '../actions';
 
 // SCREEN AND ELEMENT SIZES
 const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 const ICON_SIZE = 30;
 const iconMargin = (SCREEN_WIDTH / 2 - ICON_SIZE) / 2;
+const iconPadding = SCREEN_HEIGHT === 812 ? 25 : 0;
 
 // ACTIONSHEET INDEX
 const CANCEL_INDEX = 2;
@@ -85,7 +87,8 @@ const styles = {
     },
     iconStyle: {
         marginLeft: iconMargin,
-        marginRight: iconMargin
+        marginRight: iconMargin,
+        paddingBottom: iconPadding
     }
 };
 

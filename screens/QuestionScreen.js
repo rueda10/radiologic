@@ -13,8 +13,10 @@ import ImageViewer from '../components/ImageViewer';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-const HEADER_HEIGHT = 65;
-const TABBAR_HEIGHT = 65;
+const HEADER_HEIGHT = SCREEN_HEIGHT === 812 ? 88 : 65;
+const TABBAR_HEIGHT = SCREEN_HEIGHT === 812 ? 88 : 65;
+
+const TOP_PADDING = SCREEN_HEIGHT === 812 ? 35 : 25;
 
 const HEADER_TITLE = ['Home', 'Inicio'];
 const TOPIC_TITLE = ['Choose a topic to begin', 'Escoge un tema para empezar'];
@@ -28,18 +30,19 @@ class QuestionScreen extends Component {
         
         this.state = {
             currentRoot: null,
-            searchTerm: ''
+            searchTerm: '',
+            searchBarHidden: true
         }
     }
     
     // EVENT HANDLERS
-    setCurrentQuestion(next) {
-        this.props.setCurrent(_.isNil(next) ? {} : this.props.questions[next]);
+    setCurrentQuestion(id) {
+        this.props.setCurrent(_.isNil(id) ? {} : this.props.questions[id]);
     }
     
-    setRoot(next) {
-        this.setState({ currentRoot: next });
-        this.setCurrentQuestion(next);
+    setRoot(id) {
+        this.setState({ currentRoot: id });
+        this.setCurrentQuestion(id);
     }
     
     startOver() {
@@ -48,6 +51,10 @@ class QuestionScreen extends Component {
     
     onChangeSearchTerm(term) {
         this.setState({ searchTerm: term });
+    }
+    
+    displaySearchBar() {
+        this.setState({ searchBarHidden: !this.state.searchBarHidden });
     }
     
     // RENDER HELPERS
@@ -116,7 +123,7 @@ class QuestionScreen extends Component {
                             underlayColor='#01579b'
                             containerStyle={{
                                 marginLeft: 5,
-                                marginTop: 25
+                                paddingTop: TOP_PADDING
                             }}
                             onPress={() => this.setCurrentQuestion(current.previous)}
                         />
@@ -158,17 +165,33 @@ class QuestionScreen extends Component {
             return (
                 <View style={{ flex: 1 }}>
                     <View style={styles.mainHeaderStyle}>
+                        <View style={{ flex: 1 }}/>
                         <Text style={styles.headerTitleStyle}>{HEADER_TITLE[language]}</Text>
+                        <Icon
+                            style={{ flex: 1 }}
+                            name='search'
+                            size={34}
+                            color='white'
+                            underlayColor='#01579b'
+                            containerStyle={{
+                                paddingRight: 5,
+                                paddingTop: TOP_PADDING
+                            }}
+                            onPress={() => this.displaySearchBar()}
+                        />
                     </View>
                     <View style={{ height: middleContentHeight }}>
                         <View>
-                            <SearchBar
-                                lightTheme
-                                containerStyle={styles.searchBarContainerStyle}
-                                inputStyle={styles.searchBarInputStyle}
-                                onChangeText={(text) => this.onChangeSearchTerm(text)}
-                                placeholder={SEARCH_PLACEHOLDER[language]}
-                            />
+                            {
+                                !this.state.searchBarHidden &&
+                                <SearchBar
+                                    lightTheme
+                                    containerStyle={styles.searchBarContainerStyle}
+                                    inputStyle={styles.searchBarInputStyle}
+                                    onChangeText={(text) => this.onChangeSearchTerm(text)}
+                                    placeholder={SEARCH_PLACEHOLDER[language]}
+                                />
+                            }
                         </View>
                         <View style={styles.titleStyle}>
                             <Text style={styles.titleTextStyle}>{TOPIC_TITLE[language]}</Text>
@@ -212,19 +235,29 @@ const styles = {
         height: HEADER_HEIGHT,
         backgroundColor: '#01579b',
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'space-between',
+        borderColor: '#4f83cc',
+        borderBottomWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+        elevation: 2,
     },
     headerTitleStyle: {
-        fontSize: 22,
+        flex: 7,
+        paddingTop: TOP_PADDING,
+        fontSize: 26,
         color: 'white',
-        marginRight: 10,
-        paddingTop: 25,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        textAlign: 'center'
     },
     titleStyle: {
         width: SCREEN_WIDTH,
         paddingLeft: 15,
-        paddingRight: 15
+        paddingRight: 15,
+        marginTop: 15,
+        marginBottom: 15
     },
     titleTextStyle: {
         textAlign: 'center',
@@ -233,7 +266,7 @@ const styles = {
         fontSize: 25,
         paddingLeft: 10,
         paddingRight: 10,
-        paddingTop: 10,
+        paddingTop: 5,
         paddingBottom: 5
     },
     descriptionStyle: {
@@ -248,7 +281,7 @@ const styles = {
         fontWeight: 'bold',
         color: 'white',
         marginRight: 10,
-        paddingTop: 25
+        paddingTop: TOP_PADDING
     },
     searchBarContainerStyle: {
         backgroundColor: '#01579b'

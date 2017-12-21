@@ -1,64 +1,64 @@
 export default {
-    '01': {
+    'abnormal-attenuation-head-ct': {
         question: ['Is there any abnormal attenuation?', 'TEST'],
         subject: ['Abnormal attenuation on head CT', 'TEST'],
         description: ['Abnormal attenuation happens when guere guere guere and when there is some guere guere guere.', 'TEST'],
         options: [
             {
                 option: ['Yes', 'Si'],
-                next: '02'
+                next: 'abnormal-attenuation-head-ct > yes'
             },
             {
                 option: ['No', 'No'],
-                next: '12'
+                next: 'abnormal-attenuation-head-ct > no'
             }
         ],
         tags: ['abnormal', 'attenuation'],
         images: ['https://www.oumedicine.com/images/ad-radiology/nml-mra_bright.jpg?sfvrsn=2', 'http://radiologylouisville.com/wp-content/uploads/2011/02/mrib15rewindow_200w_ss.jpg'],
         previous: null
     },
-    '02': {
+    'abnormal-attenuation-head-ct > yes': {
         question: ['Is the abnormality dark or bright?', 'Es la anormalidad oscura o brillante?'],
         options: [
             {
                 option: ['Dark', 'Oscura'],
-                next: '03'
+                next: 'abnormal-attenuation-head-ct > yes > dark'
             },
             {
                 option: ['Bright', 'Brillante'],
-                next: '08'
+                next: 'abnormal-attenuation-head-ct > yes > bright'
             }
         ],
         tags: ['abnormal', 'attenuation'],
         images: [],
-        previous: '01'
+        previous: 'abnormal-attenuation-head-ct'
     },
-    '03': {
+    'abnormal-attenuation-head-ct > yes > dark': {
         question: ['What is the dark abnormality causing?', ''],
         options: [
             {
                 option: ['Mass Effect', ''],
-                next: '04'
+                next: 'abnormal-attenuation-head-ct > yes > dark > mass-effect'
             },
             {
                 option: ['Volume Loss', ''],
-                next: '06'
+                next: 'abnormal-attenuation-head-ct > yes > dark > volume-loss'
             },
             {
                 option: ['Nothing', ''],
-                next: '07'
+                next: 'abnormal-attenuation-head-ct > yes > dark > nothing'
             }
         ],
         tags: ['abnormal', 'attenuation'],
         images: [],
-        previous: '02'
+        previous: 'abnormal-attenuation-head-ct > yes'
     },
-    '04': {
+    'abnormal-attenuation-head-ct > yes > dark > mass-effect': {
         question: ['What type of Mass Effect?', ''],
         options: [
             {
                 option: ['Edema', ''],
-                next: '05'
+                next: 'abnormal-attenuation-head-ct > yes > dark > mass-effect > edema'
             },
             {
                 option: ['Mass', ''],
@@ -71,9 +71,9 @@ export default {
         ],
         tags: ['abnormal', 'attenuation'],
         images: [],
-        previous: '03'
+        previous: 'abnormal-attenuation-head-ct > yes > dark'
     },
-    '05': {
+    'abnormal-attenuation-head-ct > yes > dark > mass-effect > edema': {
         question: ['What type of Edema?', ''],
         options: [
             {
@@ -91,9 +91,9 @@ export default {
         ],
         tags: ['abnormal', 'attenuation'],
         images: [],
-        previous: '04'
+        previous: 'abnormal-attenuation-head-ct > yes > dark > mass-effect'
     },
-    '06': {
+    'abnormal-attenuation-head-ct > yes > dark > volume-loss': {
         question: ['Consider the following:', ''],
         options: [
             {
@@ -103,9 +103,9 @@ export default {
         ],
         tags: ['abnormal', 'attenuation'],
         images: [],
-        previous: '03'
+        previous: 'abnormal-attenuation-head-ct > yes > dark'
     },
-    '07': {
+    'abnormal-attenuation-head-ct > yes > dark > nothing': {
         question: ['Consider the following:', ''],
         options: [
             {
@@ -119,9 +119,9 @@ export default {
         ],
         tags: ['abnormal', 'attenuation'],
         images: [],
-        previous: '03'
+        previous: 'abnormal-attenuation-head-ct > yes > dark'
     },
-    '08': {
+    'abnormal-attenuation-head-ct > yes > bright': {
         question: ['Consider the following:', ''],
         options: [
             {
@@ -134,30 +134,30 @@ export default {
             },
             {
                 option: ['It\'s blood.', ''],
-                next: '09'
+                next: 'abnormal-attenuation-head-ct > yes > bright > blood'
             }
         ],
         tags: ['abnormal', 'attenuation'],
         images: [],
-        previous: '02'
+        previous: 'abnormal-attenuation-head-ct > yes'
     },
-    '09': {
+    'abnormal-attenuation-head-ct > yes > bright > blood': {
         question: ['Where is the blood?', ''],
         options: [
             {
                 option: ['Extraaxial', ''],
-                next: '10'
+                next: 'abnormal-attenuation-head-ct > yes > bright > blood > extraaxial'
             },
             {
                 option: ['Intraaxial.', ''],
-                next: '11'
+                next: 'abnormal-attenuation-head-ct > yes > bright > blood > intraaxial'
             }
         ],
         tags: ['abnormal', 'attenuation'],
         images: [],
-        previous: '08'
+        previous: 'abnormal-attenuation-head-ct > yes > bright'
     },
-    '10': {
+    'abnormal-attenuation-head-ct > yes > bright > blood > extraaxial': {
         question: ['Consider the following:', ''],
         options: [
             {
@@ -175,9 +175,9 @@ export default {
         ],
         tags: ['abnormal', 'attenuation'],
         images: [],
-        previous: '09'
+        previous: 'abnormal-attenuation-head-ct > yes > bright > blood'
     },
-    '11': {
+    'abnormal-attenuation-head-ct > yes > bright > blood > intraaxial': {
         question: ['Consider the following:', ''],
         options: [
             {
@@ -191,9 +191,9 @@ export default {
         ],
         tags: ['abnormal', 'attenuation'],
         images: [],
-        previous: '09'
+        previous: 'abnormal-attenuation-head-ct > yes > bright > blood'
     },
-    '12': {
+    'abnormal-attenuation-head-ct > no': {
         question: ['How are the size and configuration of the ventricles and cerebral sulci?', ''],
         options: [
             {
@@ -207,7 +207,7 @@ export default {
         ],
         tags: ['abnormal', 'attenuation'],
         images: [],
-        previous: '09'
+        previous: 'abnormal-attenuation-head-ct'
     },
     'pediatric-myelination': {
         question: ['Begin with your T1 sequence. Myelination on T1 appears bright relative to grey matter.', 'TEST2'],
@@ -215,30 +215,30 @@ export default {
         options: [
             {
                 option: ['Next', 'Siguiente'],
-                next: 'pediatric-myelination-01'
+                next: 'pediatric-myelination > 01'
             }
         ],
         tags: [],
         images: [],
         previous: null
     },
-    'pediatric-myelination-01': {
+    'pediatric-myelination > 01': {
         question: ['Is the middle cerebellar peduncle myelinated?'],
         options: [
             {
                 option: ['Yes', 'Si'],
-                next: 'pediatric-myelination-02'
+                next: 'pediatric-myelination > 01 > 02'
             },
             {
                 option: ['No', 'No'],
-                next: 'pediatric-myelination-preterm'
+                next: 'pediatric-myelination > 01 > preterm'
             }
         ],
         tags: [],
         images: [],
         previous: 'pediatric-myelination'
     },
-    'pediatric-myelination-preterm': {
+    'pediatric-myelination > 01 > preterm': {
         question: ['This myelination pattern suggests:'],
         options: [
             {
@@ -248,73 +248,109 @@ export default {
         ],
         tags: [],
         images: [],
-        previous: 'pediatric-myelination-01'
+        previous: 'pediatric-myelination > 01'
     },
-    'pediatric-myelination-02': {
+    'pediatric-myelination > 01 > 02': {
         question: ['Is the dorsal brainstem myelinated?'],
         options: [
             {
                 option: ['Yes', 'Si'],
-                next: 'pediatric-myelination-03'
+                next: 'pediatric-myelination > 01 > 02 > 03'
             },
             {
                 option: ['No', 'No'],
-                next: 'pediatric-myelination-preterm'
+                next: 'pediatric-myelination > 01 > 02 > preterm'
             }
         ],
         tags: [],
         images: [],
-        previous: 'pediatric-myelination-01'
+        previous: 'pediatric-myelination > 01'
     },
-    'pediatric-myelination-03': {
+    'pediatric-myelination > 01 > 02 > preterm': {
+        question: ['This myelination pattern suggests:'],
+        options: [
+            {
+                option: ['Preterm infant', ''],
+                next: null
+            }
+        ],
+        tags: [],
+        images: [],
+        previous: 'pediatric-myelination > 01 > 02'
+    },
+    'pediatric-myelination > 01 > 02 > 03': {
         question: ['Is the posterior limb of the internal capsule myelinated?'],
         options: [
             {
                 option: ['Yes', 'Si'],
-                next: 'pediatric-myelination-04'
+                next: 'pediatric-myelination > 01 > 02 > 03 > 04'
             },
             {
                 option: ['No', 'No'],
-                next: 'pediatric-myelination-preterm'
+                next: 'pediatric-myelination > 01 > 02 > 03 > preterm'
             }
         ],
         tags: [],
         images: [],
-        previous: 'pediatric-myelination-02'
+        previous: 'pediatric-myelination > 01 > 02'
     },
-    'pediatric-myelination-04': {
+    'pediatric-myelination > 01 > 02 > 03 > preterm': {
+        question: ['This myelination pattern suggests:'],
+        options: [
+            {
+                option: ['Preterm infant', ''],
+                next: null
+            }
+        ],
+        tags: [],
+        images: [],
+        previous: 'pediatric-myelination > 01 > 02 > 03'
+    },
+    'pediatric-myelination > 01 > 02 > 03 > 04': {
         question: ['Is the peri-Rolandic white matter myelinated?'],
         options: [
             {
                 option: ['Yes', 'Si'],
-                next: 'pediatric-myelination-05'
+                next: 'pediatric-myelination > 01 > 02 > 03 > 04 > 05'
             },
             {
                 option: ['No', 'No'],
-                next: 'pediatric-myelination-preterm'
+                next: 'pediatric-myelination > 01 > 02 > 03 > 04 > preterm'
             }
         ],
         tags: [],
         images: [],
         previous: 'pediatric-myelination-03'
     },
-    'pediatric-myelination-05': {
-        question: ['Is the anterior limb of the internal capsule myelinated?'],
+    'pediatric-myelination > 01 > 02 > 03 > 04 > preterm': {
+        question: ['This myelination pattern suggests:'],
         options: [
             {
-                option: ['Yes', 'Si'],
-                next: 'pediatric-myelination-06'
-            },
-            {
-                option: ['No', 'No'],
-                next: 'pediatric-myelination-term'
+                option: ['Preterm infant', ''],
+                next: null
             }
         ],
         tags: [],
         images: [],
-        previous: 'pediatric-myelination-04'
+        previous: 'pediatric-myelination > 01 > 02 > 03 > 04'
     },
-    'pediatric-myelination-term': {
+    'pediatric-myelination > 01 > 02 > 03 > 04 > 05': {
+        question: ['Is the anterior limb of the internal capsule myelinated?'],
+        options: [
+            {
+                option: ['Yes', 'Si'],
+                next: 'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06'
+            },
+            {
+                option: ['No', 'No'],
+                next: 'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > term'
+            }
+        ],
+        tags: [],
+        images: [],
+        previous: 'pediatric-myelination > 01 > 02 > 03 > 04'
+    },
+    'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > term': {
         question: ['This myelination pattern suggests:'],
         options: [
             {
@@ -324,25 +360,25 @@ export default {
         ],
         tags: [],
         images: [],
-        previous: 'pediatric-myelination-05'
+        previous: 'pediatric-myelination > 01 > 02 > 03 > 04 > 05'
     },
-    'pediatric-myelination-06': {
+    'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06': {
         question: ['Is the splenium of the corpus callosum myelinated?'],
         options: [
             {
                 option: ['Yes', 'Si'],
-                next: 'pediatric-myelination-07'
+                next: 'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06 > 07'
             },
             {
                 option: ['No', 'No'],
-                next: 'pediatric-myelination-2-3'
+                next: 'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06 > 2-3 months'
             }
         ],
         tags: [],
         images: [],
-        previous: 'pediatric-myelination-05'
+        previous: 'pediatric-myelination > 01 > 02 > 03 > 04 > 05'
     },
-    'pediatric-myelination-2-3': {
+    'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06 > 2-3 months': {
         question: ['This myelination pattern suggests:'],
         options: [
             {
@@ -352,9 +388,9 @@ export default {
         ],
         tags: [],
         images: [],
-        previous: 'pediatric-myelination-06'
+        previous: 'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06'
     },
-    'pediatric-myelination-07': {
+    'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06 > 07': {
         question: ['Is the genu of the corpus callosum myelinated?'],
         options: [
             {
@@ -363,14 +399,14 @@ export default {
             },
             {
                 option: ['No', 'No'],
-                next: 'pediatric-myelination-3-4'
+                next: 'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06 > 07 > 3-4 months'
             }
         ],
         tags: [],
         images: [],
-        previous: 'pediatric-myelination-06'
+        previous: 'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06'
     },
-    'pediatric-myelination-3-4': {
+    'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06 > 07 > 3-4 months': {
         question: ['This myelination pattern suggests:'],
         options: [
             {
@@ -380,37 +416,37 @@ export default {
         ],
         tags: [],
         images: [],
-        previous: 'pediatric-myelination-07'
+        previous: 'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06 > 07'
     },
     'pediatric-myelination-T2': {
         question: ['Now switch to T2 sequence. Remember, myelination appears dark relative to grey matter.'],
         options: [
             {
                 option: ['Next', ''],
-                next: 'pediatric-myelination-T2-01'
+                next: 'pediatric-myelination-T2 > 01'
             }
         ],
         tags: [],
         images: [],
-        previous: 'pediatric-myelination-07'
+        previous: 'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06 > 07'
     },
-    'pediatric-myelination-T2-01': {
+    'pediatric-myelination-T2 > 01': {
         question: ['Is the genu of the corpus callosum myelinated?'],
         options: [
             {
                 option: ['Yes', 'Si'],
-                next: 'pediatric-myelination-T2-02'
+                next: 'pediatric-myelination-T2 > 01 > 02'
             },
             {
                 option: ['No', 'No'],
-                next: 'pediatric-myelination-4-6'
+                next: 'pediatric-myelination-T2 > 01 > 4-6 months'
             }
         ],
         tags: [],
         images: [],
         previous: 'pediatric-myelination-T2'
     },
-    'pediatric-myelination-4-6': {
+    'pediatric-myelination-T2 > 01 > 4-6 months': {
         question: ['This myelination pattern suggests:'],
         options: [
             {
@@ -420,25 +456,25 @@ export default {
         ],
         tags: [],
         images: [],
-        previous: 'pediatric-myelination-T2-01'
+        previous: 'pediatric-myelination-T2 > 01'
     },
-    'pediatric-myelination-T2-02': {
+    'pediatric-myelination-T2 > 01 > 02': {
         question: ['Is the anterior limb of the internal capsule myelinated?'],
         options: [
             {
                 option: ['Yes', 'Si'],
-                next: 'pediatric-myelination-T2-03'
+                next: 'pediatric-myelination-T2 > 01 > 02 > 03'
             },
             {
                 option: ['No', 'No'],
-                next: 'pediatric-myelination-5-8'
+                next: 'pediatric-myelination-T2 > 01 > 02 > 5-8 months'
             }
         ],
         tags: [],
         images: [],
-        previous: 'pediatric-myelination-T2-01'
+        previous: 'pediatric-myelination-T2 > 01'
     },
-    'pediatric-myelination-5-8': {
+    'pediatric-myelination-T2 > 01 > 02 > 5-8 months': {
         question: ['This myelination pattern suggests:'],
         options: [
             {
@@ -448,25 +484,25 @@ export default {
         ],
         tags: [],
         images: [],
-        previous: 'pediatric-myelination-T2-02'
+        previous: 'pediatric-myelination-T2 > 01 > 02'
     },
-    'pediatric-myelination-T2-03': {
+    'pediatric-myelination-T2 > 01 > 02 > 03': {
         question: ['Is the peripheral frontal white matter myelinated?'],
         options: [
             {
                 option: ['Yes', 'Si'],
-                next: 'pediatric-myelination-14-18'
+                next: 'pediatric-myelination-T2 > 01 > 02 > 03 > 14-18 months'
             },
             {
                 option: ['No', 'No'],
-                next: 'pediatric-myelination-7-11'
+                next: 'pediatric-myelination-T2 > 01 > 02 > 03 > 7-11 months'
             }
         ],
         tags: [],
         images: [],
-        previous: 'pediatric-myelination-T2-02'
+        previous: 'pediatric-myelination-T2 > 01 > 02'
     },
-    'pediatric-myelination-7-11': {
+    'pediatric-myelination-T2 > 01 > 02 > 03 > 7-11 months': {
         question: ['This myelination pattern suggests:'],
         options: [
             {
@@ -476,9 +512,9 @@ export default {
         ],
         tags: [],
         images: [],
-        previous: 'pediatric-myelination-T2-03'
+        previous: 'pediatric-myelination-T2 > 01 > 02 > 03'
     },
-    'pediatric-myelination-14-18': {
+    'pediatric-myelination-T2 > 01 > 02 > 03 > 14-18 months': {
         question: ['This myelination pattern suggests:'],
         options: [
             {
@@ -488,6 +524,216 @@ export default {
         ],
         tags: [],
         images: [],
-        previous: 'pediatric-myelination-T2-03'
+        previous: 'pediatric-myelination-T2 > 01 > 02 > 03'
+    },
+    'cystic-sellar-mass': {
+        question: ['Where is it located?', 'TEST'],
+        subject: ['Cystic sellar mass: differentiating between cystic pituitary adenoma and rathe cleft cyst', 'TEST3'],
+        description: ['This does not include masses that demonstrate invasion of the cavernous sinuses or masses that exhibit enhancements of a solid component.', 'TEST'],
+        options: [
+            {
+                option: ['Midline', ''],
+                next: 'cystic-sellar-mass > midline'
+            },
+            {
+                option: ['Off-midline', 'No'],
+                next: 'cystic-sellar-mass > off-midline'
+            }
+        ],
+        tags: ['abnormal', 'attenuation'],
+        images: [],
+        previous: null
+    },
+    'cystic-sellar-mass > midline': {
+        question: ['Is there fluid-fluid level?', 'TEST'],
+        options: [
+            {
+                option: ['Yes', 'Si'],
+                next: 'cystic-sellar-mass > midline > yes'
+            },
+            {
+                option: ['No', 'No'],
+                next: 'cystic-sellar-mass > midline > no'
+            }
+        ],
+        tags: ['abnormal', 'attenuation'],
+        images: [],
+        previous: 'cystic-sellar-mass'
+    },
+    'cystic-sellar-mass > midline > yes': {
+        question: ['These findings suggest the following:', 'TEST'],
+        options: [
+            {
+                option: ['Adenoma', ''],
+                next: null
+            }
+        ],
+        tags: ['abnormal', 'attenuation'],
+        images: [],
+        previous: 'cystic-sellar-mass > midline'
+    },
+    'cystic-sellar-mass > midline > no': {
+        question: ['Is there an intracystic module?', 'TEST'],
+        options: [
+            {
+                option: ['Yes', 'Si'],
+                next: 'cystic-sellar-mass > midline > no > yes'
+            },
+            {
+                option: ['No', 'No'],
+                next: 'cystic-sellar-mass > midline > no > no'
+            }
+        ],
+        tags: ['abnormal', 'attenuation'],
+        images: [],
+        previous: 'cystic-sellar-mass > midline'
+    },
+    'cystic-sellar-mass > midline > no > yes': {
+        question: ['These findings suggest the following:', 'TEST'],
+        options: [
+            {
+                option: ['Rathe cleft cyst', ''],
+                next: null
+            }
+        ],
+        tags: ['abnormal', 'attenuation'],
+        images: [],
+        previous: 'cystic-sellar-mass > midline > no'
+    },
+    'cystic-sellar-mass > midline > no > no': {
+        question: ['Is there separation?', 'TEST'],
+        options: [
+            {
+                option: ['Yes', ''],
+                next: 'cystic-sellar-mass > midline > no > no > yes'
+            },
+            {
+                option: ['No', ''],
+                next: 'cystic-sellar-mass > midline > no > no > no'
+            }
+        ],
+        tags: ['abnormal', 'attenuation'],
+        images: [],
+        previous: 'cystic-sellar-mass > midline > no'
+    },
+    'cystic-sellar-mass > midline > no > no > no': {
+        question: ['These findings suggest:', 'TEST'],
+        options: [
+            {
+                option: ['Rathe cleft cyst', ''],
+                next: null
+            }
+        ],
+        tags: ['abnormal', 'attenuation'],
+        images: [],
+        previous: 'cystic-sellar-mass > midline > no > no'
+    },
+    'cystic-sellar-mass > midline > no > no > yes': {
+        question: ['These findings suggest:', 'TEST'],
+        options: [
+            {
+                option: ['Adenoma', ''],
+                next: null
+            }
+        ],
+        tags: ['abnormal', 'attenuation'],
+        images: [],
+        previous: 'cystic-sellar-mass > midline > no > no'
+    },
+    'cystic-sellar-mass > off-midline': {
+        question: ['Is there fluid-fluid level or hypointense rim on T2?', 'TEST'],
+        options: [
+            {
+                option: ['Yes', 'Si'],
+                next: 'cystic-sellar-mass > off-midline > yes'
+            },
+            {
+                option: ['No', 'No'],
+                next: 'cystic-sellar-mass > off-midline > no'
+            }
+        ],
+        tags: ['abnormal', 'attenuation'],
+        images: [],
+        previous: 'cystic-sellar-mass'
+    },
+    'cystic-sellar-mass > off-midline > yes': {
+        question: ['These findings suggest:', 'TEST'],
+        options: [
+            {
+                option: ['Adenoma', ''],
+                next: null
+            }
+        ],
+        tags: ['abnormal', 'attenuation'],
+        images: [],
+        previous: 'cystic-sellar-mass > off-midline'
+    },
+    'cystic-sellar-mass > off-midline > no': {
+        question: ['Is there separation?:', 'TEST'],
+        options: [
+            {
+                option: ['Yes', 'Si'],
+                next: 'cystic-sellar-mass > off-midline > no > yes'
+            },
+            {
+                option: ['No', 'No'],
+                next: 'cystic-sellar-mass > off-midline > no > no'
+            }
+        ],
+        tags: ['abnormal', 'attenuation'],
+        images: [],
+        previous: 'cystic-sellar-mass > off-midline'
+    },
+    'cystic-sellar-mass > off-midline > no > yes': {
+        question: ['These findings suggest:', 'TEST'],
+        options: [
+            {
+                option: ['Adenoma', ''],
+                next: null
+            }
+        ],
+        tags: ['abnormal', 'attenuation'],
+        images: [],
+        previous: 'cystic-sellar-mass > off-midline > no'
+    },
+    'cystic-sellar-mass > off-midline > no > no': {
+        question: ['Is there an intracystic module?', 'TEST'],
+        options: [
+            {
+                option: ['Yes', 'Si'],
+                next: 'cystic-sellar-mass > off-midline > no > no > yes'
+            },
+            {
+                option: ['No', 'No'],
+                next: 'cystic-sellar-mass > off-midline > no > no > no'
+            }
+        ],
+        tags: ['abnormal', 'attenuation'],
+        images: [],
+        previous: 'cystic-sellar-mass > off-midline > no'
+    },
+    'cystic-sellar-mass > off-midline > no > no > yes': {
+        question: ['These findings suggest:?', 'TEST'],
+        options: [
+            {
+                option: ['Rathe cleft cyst', ''],
+                next: null
+            }
+        ],
+        tags: ['abnormal', 'attenuation'],
+        images: [],
+        previous: 'cystic-sellar-mass > off-midline > no > no'
+    },
+    'cystic-sellar-mass > off-midline > no > no > no': {
+        question: ['These findings suggest:', 'TEST'],
+        options: [
+            {
+                option: ['Adenoma', ''],
+                next: null
+            }
+        ],
+        tags: ['abnormal', 'attenuation'],
+        images: [],
+        previous: 'cystic-sellar-mass > off-midline > no > no'
     }
 };

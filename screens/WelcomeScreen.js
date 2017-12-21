@@ -20,10 +20,9 @@ class WelcomeScreen extends Component {
                         <Button
                             raised
                             large
-                            title="BEGIN / INICIAR"
+                            icon={{ name: 'home' }}
+                            title='START'
                             backgroundColor='#01579b'
-                            color='white'
-                            fontWeight='bold'
                             onPress={() => this.props.navigation.navigate('main')}
                         />
                     </View>
