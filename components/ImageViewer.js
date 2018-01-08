@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, ScrollView, Image, Dimensions, Animated } from 'react-native';
-import Lightbox from 'react-native-lightbox';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -10,20 +9,15 @@ class ImageViewer extends Component {
     renderImages(images) {
         return images.map((image) => {
             return (
-                <Lightbox
+                <View
                     key={image}
+                    style={styles.slideStyle}
                 >
-                    <ScrollView
-                        minimumZoomScale={1}
-                        maximumZoomScale={2}
-                        centerContent={true}
-                    >
-                        <Image
-                            style={styles.thumbnailStyle}
-                            source={{ uri: image }}
-                        />
-                    </ScrollView>
-                </Lightbox>
+                    <Image
+                        style={styles.thumbnailStyle}
+                        source={{ uri: image }}
+                    />
+                </View>
             )
         });
     }
@@ -69,10 +63,17 @@ class ImageViewer extends Component {
 }
 
 const styles = {
+    slideStyle: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: SCREEN_WIDTH - 60,
+        marginLeft: 15,
+        marginRight: 15
+    },
     thumbnailStyle: {
         height: 200,
-        width: SCREEN_WIDTH - 36,
-        resizeMode: 'contain'
+        width: 200
     },
     dotsStyle: {
         flexDirection: 'row',
