@@ -1,31 +1,35 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Image, Dimensions, Animated, TouchableWithoutFeedback } from 'react-native';
+import { View, ScrollView, Dimensions, Animated, TouchableWithoutFeedback } from 'react-native';
 
 import ImageViewer from './ImageViewer';
+import ImageOverlay from './ImageOverlay';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
+// touchablewithoutfeedback wrapper
+const TouchableWithoutFeedbackForCompositeComponents = ({onPress, children}) =>
+    <TouchableWithoutFeedback onPress={onPress}>
+        <View>
+            {children}
+        </View>
+    </TouchableWithoutFeedback>
+
+// Presentation component
 const Item = ({ image, onPress }) => {
     return (
-        <View
-            style={styles.slideStyle}
-        >
-            <TouchableWithoutFeedback onPress={onPress}>
-                <Image
+        <View style={styles.slideStyle}>
+            <TouchableWithoutFeedbackForCompositeComponents onPress={onPress}>
+                <ImageViewer.Image
                     style={styles.thumbnailStyle}
-                    source={{uri: image}}
+                    image={image}
                 />
-            </TouchableWithoutFeedback>
+            </TouchableWithoutFeedbackForCompositeComponents>
         </View>
     );
 };
 
 class ImageGallery extends Component {
     scrollX = new Animated.Value(0);
-    
-    componentWillMount() {
-        this.props.images.map(image => Image.prefetch(image));
-    }
     
     renderDots(images) {
         let position = Animated.divide(this.scrollX, SCREEN_WIDTH);
@@ -48,6 +52,7 @@ class ImageGallery extends Component {
     render() {
         return (
             <ImageViewer
+                renderOverlay={({image, onClose }) => <ImageOverlay image={image} onClose={onClose} />}
                 renderContent={({onImageOpen}) =>
                     <View>
                         <ScrollView
@@ -63,7 +68,8 @@ class ImageGallery extends Component {
                                 <Item
                                     key={image}
                                     image={image}
-                                    onPress={() => {onImageOpen(this.props.images, image)}}/>
+                                    onPress={() => {onImageOpen(this.props.images, image)}}
+                                />
                             )}
                         </ScrollView>
                         {this.props.images && this.props.images.length > 1 &&

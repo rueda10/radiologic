@@ -1,11 +1,29 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 
 import ImageInnerViewer from "./ImageInnerViewer";
 
+class ImageViewerImage extends Component {
+    render() {
+        const { style, image } = this.props;
+        
+        return (
+            <Image
+                style={style}
+                source={{uri: image, cache: 'force-cache'}}
+                resizeMode='contain'
+            />
+        );
+    }
+}
+
 class ImageViewer extends Component {
+    static Image = ImageViewerImage;
+    
     state = {
         images: null,
+        currentImage: null,
+        isOverlayOpen: true,
         topOffset: 0
     };
     
@@ -35,14 +53,32 @@ class ImageViewer extends Component {
         this.setState({images: null, currentImage: null});
     };
     
+    changeImage = currentImage => {
+        this.setState({ currentImage })
+    };
+    
+    setOverlay = isOverlayOpen => {
+        this.setState({ isOverlayOpen })
+    };
+    
     render() {
-        const {images, currentImage} = this.state;
+        const { images, currentImage, isOverlayOpen } = this.state;
+        const { renderOverlay } = this.props;
         
         return (
             <View ref='viewer'>
                 {this.props.renderContent({onImageOpen: this.open})}
                 {images &&
-                    <ImageInnerViewer topOffset={this.state.topOffset} images={images} currentImage={currentImage} onClose={this.close} />
+                    <ImageInnerViewer
+                        topOffset={this.state.topOffset}
+                        images={images}
+                        currentImage={currentImage}
+                        onClose={this.close}
+                        renderOverlay={renderOverlay}
+                        isOverlayOpen={isOverlayOpen}
+                        setOverlay={this.setOverlay}
+                        onImageChange={this.changeImage}
+                    />
                 }
             </View>
         );
