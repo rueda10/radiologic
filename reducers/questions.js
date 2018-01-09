@@ -14,7 +14,12 @@ export default {
             }
         ],
         tags: ['abnormal', 'attenuation'],
-        images: ['https://www.oumedicine.com/images/ad-radiology/nml-mra_bright.jpg?sfvrsn=2', 'http://radiologylouisville.com/wp-content/uploads/2011/02/mrib15rewindow_200w_ss.jpg', 'http://medicalfuturist.com/wp-content/uploads/2017/06/Future-of-Radiology-1.jpg', 'http://www.houstonmethodist.org/-/media/images/health-professionals/department-of-radiology/radiology_banner_1140x400.ashx?h=400&la=en&w=1140&hash=CB29C3884B6DEBB5DC11604626806E531AB24194'],
+        images: [
+            'https://www.oumedicine.com/images/ad-radiology/nml-mra_bright.jpg?sfvrsn=2',
+            'http://radiologylouisville.com/wp-content/uploads/2011/02/mrib15rewindow_200w_ss.jpg',
+            'http://medicalfuturist.com/wp-content/uploads/2017/06/Future-of-Radiology-1.jpg',
+            'http://www.houstonmethodist.org/-/media/images/health-professionals/department-of-radiology/radiology_banner_1140x400.ashx?h=400&la=en&w=1140&hash=CB29C3884B6DEBB5DC11604626806E531AB24194'
+        ],
         previous: null
     },
     'abnormal-attenuation-head-ct > yes': {
@@ -30,7 +35,9 @@ export default {
             }
         ],
         tags: ['abnormal', 'attenuation'],
-        images: [],
+        images: [
+            'https://www.oumedicine.com/images/ad-radiology/nml-mra_bright.jpg?sfvrsn=2',
+        ],
         previous: 'abnormal-attenuation-head-ct'
     },
     'abnormal-attenuation-head-ct > yes > dark': {

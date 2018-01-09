@@ -8,7 +8,7 @@ import { setCurrent } from '../actions';
 
 import { Card, CardSection } from '../components/common';
 import TabBar from '../components/TabBar';
-import ImageViewer from '../components/ImageViewer';
+import ImageGallery from '../components/ImageGallery';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -137,22 +137,18 @@ class QuestionScreen extends Component {
                             </Text>
                         }
                     </View>
-                    <View style={{ height: middleContentHeight }}>
-                        <View style={styles.titleStyle}>
-                            <Text style={styles.titleTextStyle}>{current.question[language]}</Text>
-                            {
-                                (!_.isNil(current.description) && _.size(current.description) > 0) &&
-                                <Text style={styles.descriptionStyle}>{current.description[language]}</Text>
-                            }
-                            {
-                                (!_.isNil(current.images) && _.size(current.images) > 0) &&
-                                    <ImageViewer images={current.images} />
-                            }
-                        </View>
-                        <ScrollView>
-                            {this.renderOptions()}
-                        </ScrollView>
-                    </View>
+                    <Text style={styles.titleTextStyle}>{current.question[language]}</Text>
+                    {
+                        (!_.isNil(current.description) && _.size(current.description) > 0) &&
+                        <Text style={styles.descriptionStyle}>{current.description[language]}</Text>
+                    }
+                    {
+                        (!_.isNil(current.images) && _.size(current.images) > 0) &&
+                            <ImageGallery images={current.images} />
+                    }
+                    <ScrollView style={styles.optionListStyle}>
+                        {this.renderOptions()}
+                    </ScrollView>
                     <TabBar />
                 </View>
             );
@@ -180,26 +176,24 @@ class QuestionScreen extends Component {
                             onPress={() => this.displaySearchBar()}
                         />
                     </View>
-                    <View style={{ height: middleContentHeight }}>
-                        <View>
-                            {
-                                !this.state.searchBarHidden &&
-                                <SearchBar
-                                    lightTheme
-                                    containerStyle={styles.searchBarContainerStyle}
-                                    inputStyle={styles.searchBarInputStyle}
-                                    onChangeText={(text) => this.onChangeSearchTerm(text)}
-                                    placeholder={SEARCH_PLACEHOLDER[language]}
-                                />
-                            }
-                        </View>
-                        <View style={styles.titleStyle}>
-                            <Text style={styles.titleTextStyle}>{TOPIC_TITLE[language]}</Text>
-                        </View>
-                        <ScrollView>
-                            {this.renderTopLevelQuestions(topLevelQuestions)}
-                        </ScrollView>
+                    <View>
+                        {
+                            !this.state.searchBarHidden &&
+                            <SearchBar
+                                lightTheme
+                                containerStyle={styles.searchBarContainerStyle}
+                                inputStyle={styles.searchBarInputStyle}
+                                onChangeText={(text) => this.onChangeSearchTerm(text)}
+                                placeholder={SEARCH_PLACEHOLDER[language]}
+                            />
+                        }
                     </View>
+                    <View style={styles.titleStyle}>
+                        <Text style={styles.titleTextStyle}>{TOPIC_TITLE[language]}</Text>
+                    </View>
+                    <ScrollView>
+                        {this.renderTopLevelQuestions(topLevelQuestions)}
+                    </ScrollView>
                     <TabBar />
                 </View>
             )
@@ -266,15 +260,19 @@ const styles = {
         fontSize: 25,
         paddingLeft: 10,
         paddingRight: 10,
-        paddingTop: 5,
-        paddingBottom: 5
+        paddingTop: 10,
+        paddingBottom: 10
     },
     descriptionStyle: {
+        textAlign: 'center',
         color: '#45494f',
         fontSize: 14,
         paddingLeft: 10,
         paddingRight: 10,
         paddingBottom: 10
+    },
+    optionListStyle: {
+        marginTop: 15
     },
     startOverStyle: {
         fontSize: 16,

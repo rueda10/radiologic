@@ -12,6 +12,7 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const ICON_SIZE = 30;
 const iconMargin = (SCREEN_WIDTH / 2 - ICON_SIZE) / 2;
 const iconPadding = SCREEN_HEIGHT === 812 ? 25 : 0;
+const TAB_BAR_HEIGHT = SCREEN_HEIGHT === 812 ? 84 : 64;
 
 // ACTIONSHEET INDEX
 const CANCEL_INDEX = 2;
@@ -66,14 +67,13 @@ class TabBar extends Component {
 
 const styles = {
     tabBarStyle: {
-        flex: 2,
         position: 'relative',
         bottom: 0,
         left: 0,
         right: 0,
         alignSelf: 'stretch',
         alignItems: 'center',
-        height: 64,
+        height: TAB_BAR_HEIGHT,
         backgroundColor: '#01579b',
         flexDirection: 'row',
         justifyContent: 'center',
@@ -84,6 +84,7 @@ const styles = {
         shadowOpacity: 0.2,
         shadowRadius: 2,
         elevation: 2,
+        zIndex: 0
     },
     iconStyle: {
         marginLeft: iconMargin,
