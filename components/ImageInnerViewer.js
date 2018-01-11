@@ -12,37 +12,24 @@ class ImageInnerViewer extends Component {
         height: new Animated.Value(SCREEN_HEIGHT),
         overlayOpacity: new Animated.Value(this.props.isOverlayOpen ? 1 : 0),
         openProgress: new Animated.Value(0),
-        openMeasurements: null,
+        srcImageMeasurements: null,
+        destImageMeasurements: null,
         canScrollHorizontal: true
     };
     
-    _openingImageRef: ?Image = null;
-    
     componentDidMount() {
-        this.props.sourceImageOpacitySetter(
+        const {setOpacity, measurer} = this.props.getSourceContext(this.props.imageKey);
+        setOpacity(
             this.state.openProgress.interpolate({
                 inputRange: [0.005, 0.01, 0.99, 1],
                 outputRange: [1, 0, 0, 1]
             })
         );
         
-        setTimeout(() => {
-            this._openingImageRef.getNode().measure(( destX, destY, destWidth, destHeight, destPageX, destPageY ) => {
-                this.props.sourceImageRef.getNode().measure(( sourceX, sourceY, sourceWidth, sourceHeight, sourcePageX, sourcePageY ) => {
-                    this.setState({
-                        openMeasurements: {
-                            destWidth,
-                            destHeight,
-                            sourceWidth,
-                            sourceHeight,
-                            destPageX,
-                            destPageY,
-                            sourcePageX,
-                            sourcePageY
-                        }
-                    });
-                }, console.error);
-            }, console.error);
+        const srcMeasured = measurer().then((measurements) => {
+            this.setState({
+                srcImageMeasurements: measurements
+            });
         });
     }
     
@@ -66,6 +53,14 @@ class ImageInnerViewer extends Component {
         this.setState({ canScrollHorizontal: true })
     };
     
+    handleViewableItemsChanged = ({ viewableItems }) => {
+        const item = viewableItems[0];
+        const {openProgress, imageKey, onImageChange} = this.props;
+        if (!openProgress && item && item.key !== imageKey ) {
+            onImageChange(item.key);
+        }
+    };
+    
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.isOverlayOpen !== this.props.isOverlayOpen) {
             Animated.timing(this.state.overlayOpacity, {
@@ -73,7 +68,9 @@ class ImageInnerViewer extends Component {
             }).start()
         }
         
-        if (!prevState.openMeasurements && this.state.openMeasurements) {
+        if (!(prevState.srcImageMeasurements && prevState.destImageMeasurements) &&
+            this.state.srcImageMeasurements &&
+            this.state.destImageMeasurements) {
             Animated.timing(this.state.openProgress, {
                 toValue: 1,
                 duration: 800,
@@ -88,7 +85,7 @@ class ImageInnerViewer extends Component {
     
     render() {
         const {onClose, images, imageKey, topOffset, onImageChange, renderOverlay, setOverlay, isOverlayOpen} = this.props;
-        const {width, height, overlayOpacity, openProgress, openMeasurements, canScrollHorizontal} = this.state;
+        const {width, height, overlayOpacity, openProgress, srcImageMeasurements, destImageMeasurements, canScrollHorizontal} = this.state;
         const initialIndex = images.findIndex(image => image.key === imageKey);
         const image = images.find(im => im.key === imageKey);
     
@@ -105,28 +102,28 @@ class ImageInnerViewer extends Component {
         let openingInitScale = 0;
         let openingInitTranslateX = 0;
         let openingInitTranslateY = 0;
-        if (openMeasurements) {
+        if (srcImageMeasurements && destImageMeasurements) {
             const aspectRatio = image.width / image.height;
             const screenAspectRatio = width.__getValue() / height.__getValue();
             
             if (aspectRatio - screenAspectRatio > 0) {
-                const maxDim = openMeasurements.destWidth;
-                const srcShortDim = openMeasurements.sourceHeight;
+                const maxDim = destImageMeasurements.width;
+                const srcShortDim = srcImageMeasurements.height;
                 const srcMaxDim = srcShortDim * aspectRatio;
                 openingInitScale = srcMaxDim / maxDim;
             } else {
-                const maxDim = openMeasurements.destHeight;
-                const srcShortDim = openMeasurements.sourceWidth;
+                const maxDim = destImageMeasurements.height;
+                const srcShortDim = srcImageMeasurements.width;
                 const srcMaxDim = srcShortDim / aspectRatio;
                 openingInitScale = srcMaxDim / maxDim;
             }
     
-            const translateInitY = openMeasurements.sourcePageY + (openMeasurements.sourceHeight / 2);
-            const translateDestY = openMeasurements.destPageY + (openMeasurements.destHeight / 2);
+            const translateInitY = srcImageMeasurements.y + (srcImageMeasurements.height / 2);
+            const translateDestY = destImageMeasurements.y + (destImageMeasurements.height / 2);
             openingInitTranslateY = translateInitY - translateDestY;
     
-            const translateInitX = openMeasurements.sourcePageX + (openMeasurements.sourceWidth / 2);
-            const translateDestX = openMeasurements.destPageX + (openMeasurements.destWidth / 2);
+            const translateInitX = srcImageMeasurements.x + (srcImageMeasurements.width / 2);
+            const translateDestX = destImageMeasurements.x + (destImageMeasurements.width / 2);
             openingInitTranslateX = translateInitX - translateDestX;
         }
         
@@ -161,18 +158,13 @@ class ImageInnerViewer extends Component {
                         initialNumToRender={1}
                         pagingEnabled={true}
                         data={images}
-                        // onViewableItemsChanged={({ viewableItems }) => {
-                        //     const item = viewableItems[0];
-                        //     if (item && item.key !== imageKey ) {
-                        //         onImageChange(item.key);
-                        //     }
-                        // }}
+                        // onViewableItemsChanged={this.handleViewableItemsChanged}
                         renderItem={({ item }) => {
                             return (
                                 <ImagePane
-                                    onImageRef={im => {
-                                        if (item === image) {
-                                            this._openingImageRef = im;
+                                    onImageLayout={imageMeasurements => {
+                                        if (item === image && !destImageMeasurements) {
+                                            this.setState({ destImageMeasurements: imageMeasurements});
                                         }
                                     }}
                                     onZoomEnd={this._onZoomEnd}
@@ -203,7 +195,7 @@ class ImageInnerViewer extends Component {
                         {overlay}
                     </Animated.View>
                 </Animated.View>
-                {openMeasurements && openProgress &&
+                {srcImageMeasurements && destImageMeasurements && openProgress &&
                     <Animated.Image
                         source={image.source}
                         style={{
@@ -212,10 +204,10 @@ class ImageInnerViewer extends Component {
                                 outputRange: [0, 1, 1, 0]
                             }),
                             position: 'absolute',
-                            width: openMeasurements.destWidth,
-                            height: openMeasurements.destHeight,
-                            left: openMeasurements.destPageX,
-                            top: openMeasurements.destPageY,
+                            width: destImageMeasurements.width,
+                            height: destImageMeasurements.height,
+                            left: destImageMeasurements.x,
+                            top: destImageMeasurements.y,
                             transform: [
                                 {
                                     translateX: openProgress.interpolate({

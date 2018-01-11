@@ -49,7 +49,7 @@ class ImagePane extends Component {
     };
     
     render() {
-        const { image, width, height, onImageRef, openProgress, onZoomEnd, onZoomStart } = this.props;
+        const { image, width, height, onImageLayout, openProgress, onZoomEnd, onZoomStart } = this.props;
         let photoSize = null;
         
         const aspectRatio = image.width / image.height;
@@ -101,7 +101,19 @@ class ImagePane extends Component {
                             <Animated.View style={{ width, height, justifyContent: 'center', alignItems: 'center' }}>
                                 <Animated.Image
                                     style={{width: photoSize.width, height: photoSize.height}}
-                                    ref={onImageRef}
+                                    ref={im => {
+                                        this._image = im;
+                                    }}
+                                    onLayout={() => {
+                                        this._image && this._image.getNode().measure((x, y, width, height, pageX, pageY) => {
+                                            onImageLayout({
+                                                width,
+                                                height,
+                                                x: pageX,
+                                                y: pageY
+                                            });
+                                        });
+                                    }}
                                     source={image.source}
                                 />
                             </Animated.View>

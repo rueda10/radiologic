@@ -14,8 +14,29 @@ class ImageViewerImage extends Component {
         onSourceContext: PropTypes.func
     };
     
+    componentWillMount() {
+        const { image } = this.props;
+        this.context.onSourceContext(image.key, this.measure, this.setOpacity);
+    }
+    
     setOpacity = (opacity) => {
         this.setState({ opacity })
+    };
+    
+    measure = async () => {
+        if (!this._imageRef && !this._readyToMeasure) {
+        
+        }
+        return new Promise((resolve, reject) => {
+            this._imageRef.getNode().measure((imgX, imgY, imgWidth, imgHeight, imgPageX, imgPageY) => {
+                resolve({
+                    width: imgWidth,
+                    height: imgHeight,
+                    x: imgPageX,
+                    y: imgPageY
+                });
+            }, reject);
+        });
     };
     
     render() {
@@ -28,7 +49,10 @@ class ImageViewerImage extends Component {
                 source={image.source}
                 resizeMode='cover'
                 ref={im => {
-                    this.context.onSourceContext(image.key, im, this.setOpacity);
+                    this._imageRef = im;
+                }}
+                onLayout={() => {
+                    this._readyToMeasure = true;
                 }}
             />
         );
@@ -45,7 +69,9 @@ class ImageViewer extends Component {
         topOffset: 0
     };
     
-    _images: { [key: string]: Image } = {};
+    _imageMeasurers: {
+        [key: string]: () => void
+    } = {};
     _imageOpacitySetters: {
         [key: string]: (opacity: Animated.Value) => void
     } = {};
@@ -58,9 +84,16 @@ class ImageViewer extends Component {
         return { onSourceContext: this._onSourceContext };
     }
     
-    _onSourceContext = (key, imageRef, setOpacity) => {
-        this._images[key] = imageRef;
+    _onSourceContext = (key, imageMeasurer, setOpacity) => {
+        this._imageMeasurers[key] = imageMeasurer;
         this._imageOpacitySetters[key] = setOpacity;
+    };
+    
+    _getSourceContext = (key: string) => {
+        return {
+            measurer: this._imageMeasurers[key],
+            setOpacity: this._imageOpacitySetters[key]
+        }
     };
     
     open = (images, key) => {
@@ -109,8 +142,7 @@ class ImageViewer extends Component {
                         topOffset={this.state.topOffset}
                         images={images}
                         imageKey={key}
-                        sourceImageRef={this._images[key]}
-                        sourceImageOpacitySetter={this._imageOpacitySetters[key]}
+                        getSourceContext={this._getSourceContext}
                         onClose={this.close}
                         renderOverlay={renderOverlay}
                         isOverlayOpen={isOverlayOpen}
