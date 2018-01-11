@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Animated, Image, StyleSheet, FlatList, Text, Dimensions, TouchableOpacity } from 'react-native';
+import { Animated, StyleSheet, FlatList, Text, Dimensions, TouchableOpacity } from 'react-native';
 
 import ImagePane from './ImagePane';
 
@@ -12,13 +12,18 @@ class ImageInnerViewer extends Component {
         height: new Animated.Value(SCREEN_HEIGHT),
         overlayOpacity: new Animated.Value(this.props.isOverlayOpen ? 1 : 0),
         openProgress: new Animated.Value(0),
+        dismissProgress: new Animated.Value(SCREEN_HEIGHT),
         srcImageMeasurements: null,
         destImageMeasurements: null,
-        canScrollHorizontal: true
+        canScrollHorizontal: true,
+        isFirstPass: true
     };
+    
+    _isOverlayVisible = this.props.isOverlayOpen;
     
     componentDidMount() {
         const {setOpacity, measurer} = this.props.getSourceContext(this.props.imageKey);
+        
         setOpacity(
             this.state.openProgress.interpolate({
                 inputRange: [0.005, 0.01, 0.99, 1],
@@ -26,9 +31,40 @@ class ImageInnerViewer extends Component {
             })
         );
         
-        const srcMeasured = measurer().then((measurements) => {
+        const { images, imageKey } = this.props;
+        const width = this.state.width.__getValue();
+        const height = this.state.height.__getValue();
+        const image = images.find(im => im.key === imageKey);
+    
+        const aspectRatio = image.width / image.height;
+        const screenAspectRatio = width / height;
+        
+        // black bars on top and bottom
+        let destWidth = width;
+        let destHeight = width / aspectRatio;
+        let destX = 0;
+        let destY = height / 2 - destHeight / 2;
+    
+        if (aspectRatio - screenAspectRatio < 0) {
+            // black bars on left and right
+            destHeight = height;
+            destWidth = height * aspectRatio;
+            destY = 0;
+            destX = width / 2 - destWidth / 2;
+        }
+        
+        // This sets our source image measurements
+        const srcMeasured = measurer().then(measurements => {
             this.setState({
-                srcImageMeasurements: measurements
+                srcImageMeasurements: measurements,
+                destImageMeasurements: {
+                    width: destWidth,
+                    height: destHeight,
+                    x: destX,
+                    y: destY
+                }
+            }, () => {
+                this.setState({ isFirstPass: false })
             });
         });
     }
@@ -61,11 +97,20 @@ class ImageInnerViewer extends Component {
         }
     };
     
+    _animateOverlayOpacity = (isVisible) => {
+        Animated.timing(this.state.overlayOpacity, {
+            toValue: isVisible ? 1 : 0,
+            useNativeDriver: true,
+            duration: 500
+        }).start();
+        this._isOverlayVisible = isVisible;
+    };
+    
     componentDidUpdate(prevProps, prevState) {
+        const { isOverlayOpen } = this.props;
+        
         if (prevProps.isOverlayOpen !== this.props.isOverlayOpen) {
-            Animated.timing(this.state.overlayOpacity, {
-                toValue: this.props.isOverlayOpen ? 1 : 0
-            }).start()
+            this._animateOverlayOpacity(isOverlayOpen);
         }
         
         if (!(prevState.srcImageMeasurements && prevState.destImageMeasurements) &&
@@ -73,9 +118,10 @@ class ImageInnerViewer extends Component {
             this.state.destImageMeasurements) {
             Animated.timing(this.state.openProgress, {
                 toValue: 1,
-                duration: 800,
+                duration: 450,
                 useNativeDriver: true
             }).start(() => {
+                this.onShowOverlay();
                 this.setState({
                     openProgress: null
                 })
@@ -84,9 +130,9 @@ class ImageInnerViewer extends Component {
     }
     
     render() {
-        const {onClose, images, imageKey, topOffset, onImageChange, renderOverlay, setOverlay, isOverlayOpen} = this.props;
-        const {width, height, overlayOpacity, openProgress, srcImageMeasurements, destImageMeasurements, canScrollHorizontal} = this.state;
-        const initialIndex = images.findIndex(image => image.key === imageKey);
+        const { onClose, images, imageKey, topOffset, onImageChange, renderOverlay, isOverlayOpen } = this.props;
+        const { width, height, overlayOpacity, openProgress, dismissProgress, srcImageMeasurements, destImageMeasurements, isFirstPass } = this.state;
+        
         const image = images.find(im => im.key === imageKey);
     
         let overlay = (
@@ -127,6 +173,12 @@ class ImageInnerViewer extends Component {
             openingInitTranslateX = translateInitX - translateDestX;
         }
         
+        const outerViewerOpacity = openProgress || 1;
+        const innerViewerOpacity = dismissProgress.interpolate({
+            inputRange: [0, height.__getValue(), height.__getValue() * 2],
+            outputRange: [0, 1, 0]
+        });
+        
         return (
             <Animated.View
                 style={[styles.outerViewer, { top: -topOffset }]}
@@ -147,54 +199,22 @@ class ImageInnerViewer extends Component {
                     }
                 })}
             >
-                <Animated.View
-                    style={[styles.viewer, { opacity: openProgress }]}
-                >
-                    <FlatList
-                        scrollEnabled={!openProgress && canScrollHorizontal}
-                        ref={fl => { this.flatList = fl; }}
-                        style={styles.innerImageGallery}
-                        horizontal={true}
-                        initialNumToRender={1}
-                        pagingEnabled={true}
-                        data={images}
-                        // onViewableItemsChanged={this.handleViewableItemsChanged}
-                        renderItem={({ item }) => {
-                            return (
-                                <ImagePane
-                                    onImageLayout={imageMeasurements => {
-                                        if (item === image && !destImageMeasurements) {
-                                            this.setState({ destImageMeasurements: imageMeasurements});
-                                        }
-                                    }}
-                                    onZoomEnd={this._onZoomEnd}
-                                    onZoomStart={this._onZoomStart}
-                                    openProgress={openProgress}
-                                    onToggleOverlay={this.onToggleOverlay}
-                                    onShowOverlay={this.onShowOverlay}
-                                    onHideOverlay={this.onHideOverlay}
-                                    image={item}
-                                    width={width}
-                                    height={height}
-                                />
-                            );
-                        }}
-                        getItemLayout={(data, index) => ({
-                            // gets size of each of the cells
-                            length: width.__getValue(),
-                            index,
-                            offset: index * width.__getValue()
-                        })}
-                        initialScrollIndex={initialIndex}
-                        keyExtractor={(item, index) => index}
-                    />
+                { !isFirstPass &&
                     <Animated.View
-                        pointerEvents={ isOverlayOpen ? 'box-none' : 'none' }
-                        style={[{opacity: overlayOpacity}, StyleSheet.absoluteFill]}
+                        style={[styles.viewer, { opacity: outerViewerOpacity }]}
                     >
-                        {overlay}
+                        <Animated.View
+                            style={[StyleSheet.absoluteFill, { backgroundColor: 'black', opacity: innerViewerOpacity}]}
+                        />
+                        {this._renderFlatList()}
+                        <Animated.View
+                            pointerEvents={ isOverlayOpen ? 'box-none' : 'none' }
+                            style={[{opacity: overlayOpacity}, StyleSheet.absoluteFill]}
+                        >
+                            {overlay}
+                        </Animated.View>
                     </Animated.View>
-                </Animated.View>
+                }
                 {srcImageMeasurements && destImageMeasurements && openProgress &&
                     <Animated.Image
                         source={image.source}
@@ -234,6 +254,85 @@ class ImageInnerViewer extends Component {
             </Animated.View>
         );
     }
+    
+    _renderFlatList() {
+        const { images, imageKey } = this.props;
+        const { width, height, openProgress, dismissProgress, canScrollHorizontal } = this.state;
+    
+        const initialIndex = images.findIndex(image => image.key === imageKey);
+        
+        return (
+            <Animated.ScrollView
+                pagingEnabled={true}
+                scrollEventThrottle={32}
+                onScroll={Animated.event(
+                    [
+                        {
+                            nativeEvent: {
+                                contentOffset: { y: dismissProgress }
+                            }
+                        }
+                    ],
+                    {
+                        userNativeDriver: true,
+                        listener: e => {
+                            const yOffset = e.nativeEvent.contentOffset.y;
+                            const heightValue = height.__getValue();
+                            
+                            if (yOffset <= 0 || yOffset >= 2 * heightValue) {
+                                this.props.onClose();
+                            }
+                            
+                            if (yOffset === heightValue) {
+                                if (!this._isOverlayVisible && this.props.isOverlayOpen) {
+                                    this._animateOverlayOpacity(true);
+                                }
+                            } else if (this._isOverlayVisible) {
+                                this._animateOverlayOpacity(false);
+                            }
+                        }
+                    }
+                )}
+                contentOffset={{ x: 0, y: height.__getValue() }}
+            >
+                <Animated.View style={{ width, height }}/>
+                <FlatList
+                    scrollEnabled={!openProgress && canScrollHorizontal && images.length !== 1}
+                    ref={fl => { this.flatList = fl; }}
+                    style={styles.innerImageGallery}
+                    horizontal={true}
+                    initialNumToRender={1}
+                    pagingEnabled={true}
+                    data={images}
+                    // onViewableItemsChanged={this.handleViewableItemsChanged}
+                    renderItem={({ item }) => {
+                        return (
+                            <ImagePane
+                                onZoomEnd={this._onZoomEnd}
+                                onZoomStart={this._onZoomStart}
+                                openProgress={openProgress}
+                                onToggleOverlay={this.onToggleOverlay}
+                                onShowOverlay={this.onShowOverlay}
+                                onHideOverlay={this.onHideOverlay}
+                                image={item}
+                                width={width}
+                                height={height}
+                            />
+                        );
+                    }}
+                    getItemLayout={(data, index) => ({
+                        // gets size of each of the cells
+                        length: width.__getValue(),
+                        index,
+                        offset: index * width.__getValue()
+                    })}
+                    initialScrollIndex={initialIndex}
+                    keyExtractor={(item, index) => index}
+                />
+                <Animated.View style={{ width, height }}/>
+            </Animated.ScrollView>
+        );
+    }
 }
 
 const styles = {
@@ -260,8 +359,7 @@ const styles = {
         left: 0,
         height: SCREEN_HEIGHT,
         width: SCREEN_WIDTH,
-        backgroundColor: 'black',
-        zIndex: 1
+        backgroundColor: 'transparent'
     },
     innerImageGallery: {
         flex: 1

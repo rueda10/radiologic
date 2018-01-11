@@ -49,7 +49,7 @@ class ImagePane extends Component {
     };
     
     render() {
-        const { image, width, height, onImageLayout, openProgress, onZoomEnd, onZoomStart } = this.props;
+        const { image, width, height, openProgress, viewerOpacity, onZoomEnd, onZoomStart } = this.props;
         let photoSize = null;
         
         const aspectRatio = image.width / image.height;
@@ -74,9 +74,26 @@ class ImagePane extends Component {
                 }}
             >
                 <Animated.View style={[styles.innerPane, { width, height }]}>
-                    <ScrollView
+                    <TouchableWithoutFeedback onPress={this._handlePaneTap}>
+                        <Animated.View style={{ width, height, justifyContent: 'center', alignItems: 'center' }}>
+                            <Animated.Image
+                                style={{width: photoSize.width, height: photoSize.height}}
+                                ref={im => {
+                                    this._image = im;
+                                }}
+                                source={image.source}
+                            />
+                        </Animated.View>
+                    </TouchableWithoutFeedback>
+                </Animated.View>
+            </Animated.View>
+        );
+    }
+}
+
+/*<ScrollView
                         ref={sv => { this._scrollView = sv; }}
-                        horizontal={true}
+                        horizontal={false}
                         alwaysBounceHorizontal={true}
                         alwaysBounceVertical={true}
                         maximumZoomScale={3}
@@ -96,34 +113,7 @@ class ImagePane extends Component {
                         showsHorizontalScrollIndicator={false}
                         showsVerticalScrollIndicator={false}
                         centerContent
-                    >
-                        <TouchableWithoutFeedback onPress={this._handlePaneTap}>
-                            <Animated.View style={{ width, height, justifyContent: 'center', alignItems: 'center' }}>
-                                <Animated.Image
-                                    style={{width: photoSize.width, height: photoSize.height}}
-                                    ref={im => {
-                                        this._image = im;
-                                    }}
-                                    onLayout={() => {
-                                        this._image && this._image.getNode().measure((x, y, width, height, pageX, pageY) => {
-                                            onImageLayout({
-                                                width,
-                                                height,
-                                                x: pageX,
-                                                y: pageY
-                                            });
-                                        });
-                                    }}
-                                    source={image.source}
-                                />
-                            </Animated.View>
-                        </TouchableWithoutFeedback>
-                    </ScrollView>
-                </Animated.View>
-            </Animated.View>
-        );
-    }
-}
+                    >*/
 
 const styles = {
     innerPane: {

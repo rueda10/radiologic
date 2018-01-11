@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import ImageInnerViewer from "./ImageInnerViewer";
 
 class ImageViewerImage extends Component {
-    // Source image
+    // THIS IS THE SOURCE IMAGE
     state = {
         opacity: new Animated.Value(1)
     };
@@ -47,7 +47,7 @@ class ImageViewerImage extends Component {
             <Animated.Image
                 style={[style, { opacity }]}
                 source={image.source}
-                resizeMode='cover'
+                resizeMode={image.width < 300 && image.height < 434 ? 'contain' : 'cover'}
                 ref={im => {
                     this._imageRef = im;
                 }}
@@ -97,7 +97,7 @@ class ImageViewer extends Component {
     };
     
     open = (images, key) => {
-        this.setState({ images, key })
+        this.setState({ images, key, isOverlayOpen: false })
     };
     
     close = () => {
