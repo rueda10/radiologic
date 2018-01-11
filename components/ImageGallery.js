@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Dimensions, Animated, TouchableWithoutFeedback } from 'react-native';
+import { Image, View, ScrollView, Dimensions, Animated, TouchableWithoutFeedback } from 'react-native';
 
 import ImageViewer from './ImageViewer';
 import ImageOverlay from './ImageOverlay';
@@ -15,13 +15,13 @@ const TouchableWithoutFeedbackForCompositeComponents = ({onPress, children}) =>
     </TouchableWithoutFeedback>
 
 // Presentation component
-const Item = ({ image, onPress }) => {
+const Item = ({ item, images, onImageOpen }) => {
     return (
         <View style={styles.slideStyle}>
-            <TouchableWithoutFeedbackForCompositeComponents onPress={onPress}>
+            <TouchableWithoutFeedbackForCompositeComponents onPress={() => onImageOpen(images, item.key)}>
                 <ImageViewer.Image
                     style={styles.thumbnailStyle}
-                    image={image}
+                    image={item}
                 />
             </TouchableWithoutFeedbackForCompositeComponents>
         </View>
@@ -30,6 +30,28 @@ const Item = ({ image, onPress }) => {
 
 class ImageGallery extends Component {
     scrollX = new Animated.Value(0);
+    
+    state = {
+        images: []
+    };
+    
+    componentWillMount() {
+        this.props.images.map(image => {
+            Image.getSize(image, (width, height) => {
+                this.setState({
+                    images: [
+                        ...this.state.images,
+                        {
+                            key: image,
+                            source: { uri: image, cache: 'force-cache' },
+                            width,
+                            height
+                        }
+                    ]
+                });
+            });
+        });
+    }
     
     renderDots(images) {
         let position = Animated.divide(this.scrollX, SCREEN_WIDTH);
@@ -52,7 +74,7 @@ class ImageGallery extends Component {
     render() {
         return (
             <ImageViewer
-                renderOverlay={({image, onClose }) => <ImageOverlay image={image} onClose={onClose} />}
+                renderOverlay={({ image, onClose }) => <ImageOverlay image={image} onClose={onClose} />}
                 renderContent={({onImageOpen}) =>
                     <View>
                         <ScrollView
@@ -64,17 +86,18 @@ class ImageGallery extends Component {
                             )}
                             scrollEventThrottle={16}
                         >
-                            {this.props.images.map(image =>
+                            {this.state.images.map(image =>
                                 <Item
-                                    key={image}
-                                    image={image}
-                                    onPress={() => {onImageOpen(this.props.images, image)}}
+                                    key={image.key}
+                                    item={image}
+                                    images={this.state.images}
+                                    onImageOpen={onImageOpen}
                                 />
                             )}
                         </ScrollView>
-                        {this.props.images && this.props.images.length > 1 &&
+                        {this.state.images && this.state.images.length > 1 &&
                             <View style={styles.dotsStyle}>
-                                {this.renderDots(this.props.images)}
+                                {this.renderDots(this.state.images)}
                             </View>
                         }
                     </View>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 class ImageOverlay extends Component {
+    // Overlay specific to our use case
     render() {
         const { image, onClose } = this.props;
         
