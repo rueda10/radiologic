@@ -53,6 +53,29 @@ class ImageGallery extends Component {
         });
     }
     
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.images !== this.props.images) {
+            this.setState({images: []});
+        }
+        if (prevProps.images === this.props.images && this.state.images.length === 0) {
+            this.props.images.map(image => {
+                Image.getSize(image, (width, height) => {
+                    this.setState({
+                        images: [
+                            ...this.state.images,
+                            {
+                                key: image,
+                                source: { uri: image, cache: 'force-cache' },
+                                width,
+                                height
+                            }
+                        ]
+                    });
+                });
+            });
+        }
+    }
+    
     renderDots(images) {
         let position = Animated.divide(this.scrollX, SCREEN_WIDTH);
         
