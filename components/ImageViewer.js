@@ -48,6 +48,7 @@ class ImageViewerImage extends Component {
                 style={[style, { opacity }]}
                 source={image.source}
                 resizeMode={image.width < 300 && image.height < 434 ? 'contain' : 'cover'}
+                // resizeMode='contain'
                 ref={im => {
                     this._imageRef = im;
                 }}
@@ -65,16 +66,12 @@ class ImageViewer extends Component {
     state = {
         images: null,
         key: null,
-        isOverlayOpen: true,
+        isOverlayOpen: false,
         topOffset: 0
     };
     
-    _imageMeasurers: {
-        [key: string]: () => void
-    } = {};
-    _imageOpacitySetters: {
-        [key: string]: (opacity: Animated.Value) => void
-    } = {};
+    _imageMeasurers: { [key: string]: () => void } = {};
+    _imageOpacitySetters: { [key: string]: (opacity: Animated.Value) => void } = {};
     
     static childContextTypes = {
         onSourceContext: PropTypes.func
@@ -93,7 +90,7 @@ class ImageViewer extends Component {
         return {
             measurer: this._imageMeasurers[key],
             setOpacity: this._imageOpacitySetters[key]
-        }
+        };
     };
     
     open = (images, key) => {

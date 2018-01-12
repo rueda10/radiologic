@@ -3,7 +3,7 @@ import { Animated, ScrollView, StyleSheet, TouchableWithoutFeedback } from 'reac
 
 class ImagePane extends Component {
     _isZooming: boolean = false;
-    _doubleTapTimeout: number = null;
+    _doubleTapTimeout: ?number = null;
     
     _handlePaneTap = () => {
         const { width, height, onShowOverlay, onHideOverlay, onToggleOverlay } = this.props;
@@ -49,7 +49,7 @@ class ImagePane extends Component {
     };
     
     render() {
-        const { image, width, height, openProgress, viewerOpacity, onZoomEnd, onZoomStart } = this.props;
+        const { image, width, height, transitionProgress, viewerOpacity, onZoomEnd, onZoomStart } = this.props;
         let photoSize = null;
         
         const aspectRatio = image.width / image.height;
@@ -66,25 +66,49 @@ class ImagePane extends Component {
         return (
             <Animated.View
                 style={{
-                    opacity: openProgress ?
-                        openProgress.interpolate({
+                    opacity: transitionProgress ?
+                        transitionProgress.interpolate({
                             inputRange: [0, 0.99, 0.995],
                             outputRange: [0, 0, 1]
                         }) : 1
                 }}
             >
                 <Animated.View style={[styles.innerPane, { width, height }]}>
-                    <TouchableWithoutFeedback onPress={this._handlePaneTap}>
-                        <Animated.View style={{ width, height, justifyContent: 'center', alignItems: 'center' }}>
-                            <Animated.Image
-                                style={{width: photoSize.width, height: photoSize.height}}
-                                ref={im => {
-                                    this._image = im;
-                                }}
-                                source={image.source}
-                            />
-                        </Animated.View>
-                    </TouchableWithoutFeedback>
+                    <ScrollView
+                        ref={sv => { this._scrollView = sv; }}
+                        horizontal={false}
+                        alwaysBounceHorizontal={true}
+                        alwaysBounceVertical={true}
+                        maximumZoomScale={3}
+                        scrollEventThrottle={32}
+                        onScroll={e => {
+                            const { zoomScale } = e.nativeEvent;
+            
+                            if (this._isZooming && zoomScale === 1) {
+                                onZoomEnd();
+                                this._isZooming = false;
+                            } else if (!this._isZooming && zoomScale !== 1) {
+                                onZoomStart();
+                                this._isZooming = true;
+                            }
+                        }}
+                        style={[StyleSheet.absoluteFill]}
+                        showsHorizontalScrollIndicator={false}
+                        showsVerticalScrollIndicator={false}
+                        centerContent
+                    >
+                        <TouchableWithoutFeedback onPress={this._handlePaneTap}>
+                            <Animated.View style={{ width, height, justifyContent: 'center', alignItems: 'center' }}>
+                                <Animated.Image
+                                    style={{width: photoSize.width, height: photoSize.height}}
+                                    ref={im => {
+                                        this._image = im;
+                                    }}
+                                    source={image.source}
+                                />
+                            </Animated.View>
+                        </TouchableWithoutFeedback>
+                    </ScrollView>
                 </Animated.View>
             </Animated.View>
         );
