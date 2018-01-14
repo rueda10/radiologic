@@ -5,7 +5,7 @@ class ImagePane extends Component {
     _isZooming: boolean = false;
     _doubleTapTimeout: ?number = null;
     
-    _handlePaneTap = () => {
+    _handlePaneTap = (e) => {
         const { width, height, onShowOverlay, onHideOverlay, onToggleOverlay } = this.props;
         
         if (this._doubleTapTimeout) {
@@ -21,9 +21,12 @@ class ImagePane extends Component {
                 });
             } else {
                 onHideOverlay();
+                const pageX = e.nativeEvent.pageX;
+                const pageY = e.nativeEvent.pageY;
+                
                 this._scrollView && this._scrollView.scrollResponderZoomTo({
-                    x: width.__getValue() / 4,
-                    y: height.__getValue() / 4,
+                    x: pageX - (width.__getValue() / 4),
+                    y: pageY - (height.__getValue() / 4),
                     width: width.__getValue() / 2,
                     height: height.__getValue() / 2
                 });
