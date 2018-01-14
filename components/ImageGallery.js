@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, View, ScrollView, Dimensions, Animated, TouchableWithoutFeedback } from 'react-native';
+import { Image, View, FlatList, ScrollView, Dimensions, Animated, TouchableWithoutFeedback } from 'react-native';
 
 import ImageViewer from './ImageViewer';
 import ImageOverlay from './ImageOverlay';
@@ -94,13 +94,17 @@ class ImageGallery extends Component {
         });
     }
     
+    _scrollToClosingIndex = (index) => {
+        this.outerScrollViewRef.scrollToIndex({ animated: false, index });
+    };
+    
     render() {
         return (
             <ImageViewer
                 renderOverlay={({ image, onClose }) => <ImageOverlay image={image} onClose={onClose} />}
                 renderContent={({onImageOpen}) =>
                     <View>
-                        <ScrollView
+                        <FlatList
                             horizontal
                             pagingEnabled
                             showsHorizontalScrollIndicator={false}
@@ -108,16 +112,19 @@ class ImageGallery extends Component {
                                 [{nativeEvent: {contentOffset: {x: this.scrollX}}}]
                             )}
                             scrollEventThrottle={16}
-                        >
-                            {this.state.images.map(image =>
-                                <Item
-                                    key={image.key}
-                                    item={image}
-                                    images={this.state.images}
-                                    onImageOpen={onImageOpen}
-                                />
-                            )}
-                        </ScrollView>
+                            ref={(ref) => { this.outerScrollViewRef = ref; }}
+                            data={this.state.images}
+                            renderItem={({item}) => {
+                                return (
+                                    <Item
+                                        key={item.key}
+                                        item={item}
+                                        images={this.state.images}
+                                        onImageOpen={onImageOpen}
+                                    />
+                                )
+                            }}
+                        />
                         {this.state.images && this.state.images.length > 1 &&
                             <View style={styles.dotsStyle}>
                                 {this.renderDots(this.state.images)}
@@ -125,10 +132,31 @@ class ImageGallery extends Component {
                         }
                     </View>
                 }
+                scrollToClosingIndex={this._scrollToClosingIndex}
             />
         );
     }
 }
+
+// {/*<ScrollView*/}
+//     {/*horizontal*/}
+//     {/*pagingEnabled*/}
+//     {/*showsHorizontalScrollIndicator={false}*/}
+//     {/*onScroll={Animated.event(*/}
+//         {/*[{nativeEvent: {contentOffset: {x: this.scrollX}}}]*/}
+//     {/*)}*/}
+//     {/*scrollEventThrottle={16}*/}
+//     {/*ref={(ref) => { this.outerScrollViewRef = ref; }}*/}
+// {/*>*/}
+//     {/*{this.state.images.map(image =>*/}
+//         {/*<Item*/}
+//             {/*key={image.key}*/}
+//             {/*item={image}*/}
+//             {/*images={this.state.images}*/}
+//             {/*onImageOpen={onImageOpen}*/}
+//         {/*/>*/}
+//     {/*)}*/}
+// {/*</ScrollView>*/}
 
 const styles = {
     slideStyle: {

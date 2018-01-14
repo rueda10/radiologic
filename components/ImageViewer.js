@@ -101,8 +101,9 @@ class ImageViewer extends Component {
         this.setState({ images: null, key: null });
     };
     
-    changeImage = key => {
-        this.setState({ key })
+    changeImage = (key, index) => {
+        this.setState({ key });
+        this.props.scrollToClosingIndex(index);
     };
     
     setOverlay = isOverlayOpen => {
@@ -145,6 +146,7 @@ class ImageViewer extends Component {
                         isOverlayOpen={isOverlayOpen}
                         setOverlay={this.setOverlay}
                         onImageChange={this.changeImage}
+                        scrollToClosingIndex={this.props.scrollToClosingIndex}
                     />
                 }
             </View>

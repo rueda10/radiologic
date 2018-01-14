@@ -30,22 +30,6 @@ class ImageInnerViewer extends Component {
         this._measureImage(imageKey);
         
         BackHandler.addEventListener('hardwareBackPress', this.close);
-        
-        // const { measurer } = this.props.getSourceContext(this.props.imageKey);
-        //
-        // this._setSourceOpacity(this.state.openProgress);
-        //
-        // const openImageMeasurements = this._getDestMeasurements();
-        //
-        // // This sets our source image measurements
-        // measurer().then(measurements => {
-        //     this.setState({
-        //         inlineImageMeasurements: measurements,
-        //         openImageMeasurements
-        //     }, () => {
-        //         this.setState({ isFirstPass: false })
-        //     });
-        // });
     }
     
     _measureImage = imageKey => {
@@ -134,10 +118,17 @@ class ImageInnerViewer extends Component {
     };
     
     handleViewableItemsChanged = ({ viewableItems }) => {
-        const item = viewableItems[0];
-        const {openProgress, imageKey, onImageChange} = this.props;
-        if (!openProgress && item && item.key !== imageKey ) {
-            onImageChange(item.key);
+        if ( viewableItems.length > 0 ) {
+            const {item} = viewableItems[0];
+            const {openProgress, dismissProgress, imageKey, onImageChange} = this.props;
+    
+            if (!openProgress &&
+                !dismissProgress &&
+                item &&
+                item.key !== imageKey) {
+                const currentIndex = this.props.images.findIndex(im => im.key === item.key);
+                onImageChange(item.key, currentIndex);
+            }
         }
     };
     
@@ -212,6 +203,9 @@ class ImageInnerViewer extends Component {
         const openImageMeasurements = this._getDestMeasurements(imageKey);
         const { measurer } = this.props.getSourceContext(imageKey);
         const inlineImageMeasurements = await measurer();
+    
+        // const currentIndex = this.props.images.findIndex(im => im.key === imageKey);
+        // await this.props.scrollToClosingIndex(currentIndex);
         
         this.setState({
             dismissProgress,
@@ -230,7 +224,7 @@ class ImageInnerViewer extends Component {
     
     render() {
         const { images, imageKey, topOffset, onImageChange, renderOverlay, isOverlayOpen } = this.props;
-        const { width, height, overlayOpacity, openProgress, dismissProgress, dismissScrollProgress, inlineImageMeasurements, openImageMeasurements, isFirstPass } = this.state;
+        const { width, height, overlayOpacity, dismissScrollProgress, inlineImageMeasurements, openImageMeasurements, isFirstPass } = this.state;
         
         const image = images.find(im => im.key === imageKey);
     
@@ -282,18 +276,6 @@ class ImageInnerViewer extends Component {
             const translateDestX = openImageMeasurements.x + (openImageMeasurements.width / 2);
             openingInitTranslateX = translateInitX - translateDestX;
         }
-        
-        // const outerViewerOpacity = openProgress || 1;
-        // let innerViewerOpacity = dismissScrollProgress.interpolate({
-        //     inputRange: [0, height.__getValue(), height.__getValue() * 2],
-        //     outputRange: [0, 1, 0]
-        // });
-        //
-        // if (dismissProgress) {
-        //     innerViewerOpacity = dismissProgress;
-        // }
-        //
-        // const openCloseProgress = openProgress || dismissProgress;
     
         const { transitionProgress, innerViewerOpacity, outerViewerOpacity } = this._getTransitionProgress();
         
@@ -519,7 +501,7 @@ class ImageInnerViewer extends Component {
                 initialNumToRender={1}
                 pagingEnabled={true}
                 data={images}
-                // onViewableItemsChanged={this.handleViewableItemsChanged}
+                onViewableItemsChanged={this.handleViewableItemsChanged}
                 renderItem={({ item }) => {
                     return (
                         <ImagePane
