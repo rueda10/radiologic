@@ -52,19 +52,7 @@ class ImagePane extends Component {
     };
     
     render() {
-        const { image, width, height, transitionProgress, viewerOpacity, onZoomEnd, onZoomStart } = this.props;
-        let photoSize = null;
-        
-        const aspectRatio = image.width / image.height;
-        const maxWidth = width.__getValue();
-        const maxHeight = height.__getValue();
-        const screenAspectRatio = maxWidth / maxHeight;
-
-        if (aspectRatio > screenAspectRatio) {
-            photoSize = {width: maxWidth, height: maxWidth / aspectRatio};
-        } else {
-            photoSize = {height: maxHeight, width: maxHeight * aspectRatio};
-        }
+        const { width, height, transitionProgress } = this.props;
         
         return (
             <Animated.View
@@ -77,70 +65,75 @@ class ImagePane extends Component {
                 }}
             >
                 <Animated.View style={[styles.innerPane, { width, height }]}>
-                    <ScrollView
-                        ref={sv => { this._scrollView = sv; }}
-                        horizontal={false}
-                        alwaysBounceHorizontal={true}
-                        alwaysBounceVertical={true}
-                        maximumZoomScale={3}
-                        scrollEventThrottle={32}
-                        onScroll={e => {
-                            const { zoomScale } = e.nativeEvent;
-            
-                            if (this._isZooming && zoomScale === 1) {
-                                onZoomEnd();
-                                this._isZooming = false;
-                            } else if (!this._isZooming && zoomScale !== 1) {
-                                onZoomStart();
-                                this._isZooming = true;
-                            }
-                        }}
-                        style={[StyleSheet.absoluteFill]}
-                        showsHorizontalScrollIndicator={false}
-                        showsVerticalScrollIndicator={false}
-                        centerContent
-                    >
-                        <TouchableWithoutFeedback onPress={this._handlePaneTap}>
-                            <Animated.View style={{ width, height, justifyContent: 'center', alignItems: 'center' }}>
-                                <Animated.Image
-                                    style={{width: photoSize.width, height: photoSize.height}}
-                                    ref={im => {
-                                        this._image = im;
-                                    }}
-                                    source={image.source}
-                                />
-                            </Animated.View>
-                        </TouchableWithoutFeedback>
-                    </ScrollView>
+                    {this._getImage()}
                 </Animated.View>
             </Animated.View>
         );
     }
-}
-
-/*<ScrollView
-                        ref={sv => { this._scrollView = sv; }}
-                        horizontal={false}
-                        alwaysBounceHorizontal={true}
-                        alwaysBounceVertical={true}
-                        maximumZoomScale={3}
-                        scrollEventThrottle={32}
-                        onScroll={e => {
-                            const { zoomScale } = e.nativeEvent;
-                            
-                            if (this._isZooming && zoomScale === 1) {
-                                onZoomEnd();
-                                this._isZooming = false;
-                            } else if (!this._isZooming && zoomScale !== 1) {
-                                onZoomStart();
-                                this._isZooming = true;
-                            }
+    
+    _getPinchToZoom() {
+        const { onZoomEnd, onZoomStart } = this.props;
+        
+        return (
+            <ScrollView
+                ref={sv => { this._scrollView = sv; }}
+                horizontal={false}
+                alwaysBounceHorizontal={true}
+                alwaysBounceVertical={true}
+                maximumZoomScale={3}
+                scrollEventThrottle={32}
+                onScroll={e => {
+                    const { zoomScale } = e.nativeEvent;
+                    
+                    if (this._isZooming && zoomScale === 1) {
+                        onZoomEnd();
+                        this._isZooming = false;
+                    } else if (!this._isZooming && zoomScale !== 1) {
+                        onZoomStart();
+                        this._isZooming = true;
+                    }
+                }}
+                style={[StyleSheet.absoluteFill]}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                centerContent
+            >
+                {this._getImage()}
+            </ScrollView>
+        )
+    }
+    
+    _getImage() {
+        const { image, width, height } = this.props;
+    
+        let photoSize = null;
+    
+        const aspectRatio = image.width / image.height;
+        const maxWidth = width.__getValue();
+        const maxHeight = height.__getValue();
+        const screenAspectRatio = maxWidth / maxHeight;
+    
+        if (aspectRatio > screenAspectRatio) {
+            photoSize = {width: maxWidth, height: maxWidth / aspectRatio};
+        } else {
+            photoSize = {height: maxHeight, width: maxHeight * aspectRatio};
+        }
+        
+        return (
+            <TouchableWithoutFeedback onPress={this._handlePaneTap}>
+                <Animated.View style={{ width, height, justifyContent: 'center', alignItems: 'center' }}>
+                    <Animated.Image
+                        style={{width: photoSize.width, height: photoSize.height}}
+                        ref={im => {
+                            this._image = im;
                         }}
-                        style={[StyleSheet.absoluteFill]}
-                        showsHorizontalScrollIndicator={false}
-                        showsVerticalScrollIndicator={false}
-                        centerContent
-                    >*/
+                        source={image.source}
+                    />
+                </Animated.View>
+            </TouchableWithoutFeedback>
+        )
+    }
+}
 
 const styles = {
     innerPane: {

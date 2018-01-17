@@ -331,7 +331,7 @@ class ImageInnerViewer extends Component {
                         <Animated.View
                             style={[StyleSheet.absoluteFill, { backgroundColor: 'black', opacity: innerViewerOpacity}]}
                         />
-                        {this._renderFlatList()}
+                        {this._renderDismissScrollView()}
                         <Animated.View
                             pointerEvents={ isOverlayOpen ? 'box-none' : 'none' }
                             style={[{ opacity: overlayOpacity }, StyleSheet.absoluteFill]}
