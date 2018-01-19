@@ -36,8 +36,7 @@ class ImageGallery extends Component {
     };
     
     componentWillMount() {
-        this.props.images.map(image => {
-            Image.prefetch(image);
+        this.props.images.map(image => {//
             Image.getSize(image, (width, height) => {
                 this.setState({
                     images: [
@@ -138,26 +137,6 @@ class ImageGallery extends Component {
         );
     }
 }
-
-// {/*<ScrollView*/}
-//     {/*horizontal*/}
-//     {/*pagingEnabled*/}
-//     {/*showsHorizontalScrollIndicator={false}*/}
-//     {/*onScroll={Animated.event(*/}
-//         {/*[{nativeEvent: {contentOffset: {x: this.scrollX}}}]*/}
-//     {/*)}*/}
-//     {/*scrollEventThrottle={16}*/}
-//     {/*ref={(ref) => { this.outerScrollViewRef = ref; }}*/}
-// {/*>*/}
-//     {/*{this.state.images.map(image =>*/}
-//         {/*<Item*/}
-//             {/*key={image.key}*/}
-//             {/*item={image}*/}
-//             {/*images={this.state.images}*/}
-//             {/*onImageOpen={onImageOpen}*/}
-//         {/*/>*/}
-//     {/*)}*/}
-// {/*</ScrollView>*/}
 
 const styles = {
     slideStyle: {

@@ -5,10 +5,10 @@ export const getQuestions = () => {
     }
 };
 
-export const setCurrent = (currentQuestion) => {
+export const setCurrent = (currentQuestion, type) => {
     return {
         type: 'SET_CURRENT',
-        payload: currentQuestion
+        payload: { currentQuestion, type }
     }
 };
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
+import { Text, View, TouchableOpacity, Dimensions, ScrollView, Animated, Easing } from 'react-native';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Icon, SearchBar } from 'react-native-elements';
@@ -16,7 +16,7 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const HEADER_HEIGHT = SCREEN_HEIGHT === 812 ? 88 : 65;
 const TABBAR_HEIGHT = SCREEN_HEIGHT === 812 ? 88 : 65;
 
-const TOP_PADDING = SCREEN_HEIGHT === 812 ? 35 : 25;
+const TOP_PADDING = SCREEN_HEIGHT === 812 ? 30 : 20;
 
 const HEADER_TITLE = ['Home', 'Inicio'];
 const TOPIC_TITLE = ['CHOOSE A TOPIC', 'ESCOGE UN TEMA'];
@@ -35,9 +35,45 @@ class QuestionScreen extends Component {
         }
     }
     
+    componentWillMount() {
+        this.animatedSearchBar = new Animated.Value(-HEADER_HEIGHT);
+        this.animatedNextScreen = new Animated.Value(0);
+    }
+    
+    componentWillReceiveProps(nextProps) {
+        const newCurrent = nextProps.current;
+        
+        if (newCurrent !== this.props.current && newCurrent.type === 'back') {
+            Animated.timing(this.animatedNextScreen, {
+                toValue: -SCREEN_WIDTH,
+                duration: 0
+            }).start(() => {
+                Animated.timing(this.animatedNextScreen, {
+                    toValue: 0,
+                    duration: 200
+                }).start();
+            });
+        }
+    }
+    
     // EVENT HANDLERS
-    setCurrentQuestion(id) {
-        this.props.setCurrent(_.isNil(id) ? {} : this.props.questions[id]);
+    setCurrentQuestion(id, navigationType) {
+        if (navigationType === 'back') {
+            this.props.setCurrent(_.isNil(id) ? {} : this.props.questions[id], navigationType);
+        } else {
+            this.props.setCurrent(_.isNil(id) ? {} : this.props.questions[id]);
+            if (this.animatedNextScreen.__getValue() === 0) {
+                Animated.timing(this.animatedNextScreen, {
+                    toValue: SCREEN_WIDTH,
+                    duration: 0
+                }).start(() => {
+                    Animated.timing(this.animatedNextScreen, {
+                        toValue: 0,
+                        duration: 200
+                    }).start();
+                });
+            }
+        }
     }
     
     setRoot(id) {
@@ -46,7 +82,7 @@ class QuestionScreen extends Component {
     }
     
     startOver() {
-        this.setCurrentQuestion(this.state.currentRoot);
+        this.setCurrentQuestion(this.state.currentRoot, 'back');
     }
     
     onChangeSearchTerm(term) {
@@ -54,14 +90,33 @@ class QuestionScreen extends Component {
     }
     
     displaySearchBar() {
-        this.setState({ searchBarHidden: !this.state.searchBarHidden });
+        const { searchBarHidden } = this.state;
+        
+        if (searchBarHidden) {
+            this.setState({
+                searchBarHidden: !this.state.searchBarHidden
+            }, () => {
+                Animated.timing(this.animatedSearchBar, {
+                    toValue: 0,
+                    duration: 200
+                }).start();
+            });
+        } else {
+            Animated.timing(this.animatedSearchBar, {
+                toValue: -HEADER_HEIGHT,
+                duration: 200
+            }).start(() => {
+                this.setState({ searchBarHidden: !this.state.searchBarHidden });
+            });
+        }
+        
     }
     
     // RENDER HELPERS
     renderOptions() {
         const cardWidth = SCREEN_WIDTH - 12;
         
-        return this.props.current.options.map((option) => {
+        return this.props.current.currentQuestion.options.map((option) => {
             let button = (
                 <Card key={`${option.option[this.props.language]}`}>
                     <CardSection style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -108,98 +163,109 @@ class QuestionScreen extends Component {
     // RENDER METHOD
     render() {
         const { current, language, questions } = this.props;
+        const { currentQuestion } = current;
         
-        const middleContentHeight = SCREEN_HEIGHT - HEADER_HEIGHT - TABBAR_HEIGHT;
-        
-        if (!_.isEmpty(current)) {
-            // ALGORITHM SCREENS
-            return (
-                <View style={{ flex: 1 }}>
-                    <View style={styles.headerStyle}>
-                        <Icon
-                            name='navigate-before'
-                            size={34}
-                            color='white'
-                            underlayColor='#01579b'
-                            containerStyle={{
-                                marginLeft: 5,
-                                paddingTop: TOP_PADDING
-                            }}
-                            onPress={() => this.setCurrentQuestion(current.previous)}
-                        />
-                        {(this.state.currentRoot && current.question[language] === questions[this.state.currentRoot].question[language]) ?
-                            <View /> :
-                            <Text
-                                style={styles.startOverStyle}
-                                onPress={() => this.startOver()}
-                            >
-                                {STARTOVER_LABEL[language]}
-                            </Text>
-                        }
-                    </View>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.titleTextStyle}>{current.question[language]}</Text>
-                        {
-                            (!_.isNil(current.images) && _.size(current.images) > 0) &&
-                            <ImageGallery images={current.images} />
-                        }
-                        {
-                            (!_.isNil(current.description) && _.size(current.description) > 0) &&
-                            <Text style={styles.descriptionStyle}>{current.description[language]}</Text>
-                        }
-                        <ScrollView style={styles.optionListStyle}>
-                            {this.renderOptions()}
-                        </ScrollView>
-                    </View>
-                    <TabBar />
+        const header = (
+            !_.isEmpty(currentQuestion) ?
+                <View style={styles.headerStyle}>
+                    <Icon
+                        name='navigate-before'
+                        size={34}
+                        color='white'
+                        underlayColor='#01579b'
+                        containerStyle={{
+                            padding: 5,
+                            marginTop: TOP_PADDING
+                        }}
+                        onPress={() => this.setCurrentQuestion(currentQuestion.previous, 'back')}
+                    />
+                    {(this.state.currentRoot && currentQuestion.question[language] === questions[this.state.currentRoot].question[language]) ?
+                        <View /> :
+                        <Text
+                            style={styles.startOverStyle}
+                            onPress={() => this.startOver()}
+                        >
+                            {STARTOVER_LABEL[language]}
+                        </Text>
+                    }
                 </View>
-            );
-        } else {
-            // HOME SCREEN
-            const topLevelQuestions = Object.keys(questions).filter((key) => {
-                return questions[key].previous === null && questions[key].subject[language].toLowerCase().includes(this.state.searchTerm.trim().toLowerCase());
-            });
-            
-            return (
-                <View style={{ flex: 1 }}>
-                    <View style={styles.mainHeaderStyle}>
-                        <View style={{ flex: 1 }}/>
-                        <Text style={styles.headerTitleStyle}>{HEADER_TITLE[language]}</Text>
-                        <Icon
-                            style={{ flex: 1 }}
-                            name='search'
-                            size={34}
-                            color='white'
-                            underlayColor='#01579b'
-                            containerStyle={{
-                                paddingRight: 5,
-                                paddingTop: TOP_PADDING
-                            }}
-                            onPress={() => this.displaySearchBar()}
-                        />
-                    </View>
-                    <View>
-                        {
-                            !this.state.searchBarHidden &&
-                            <SearchBar
-                                lightTheme
-                                containerStyle={styles.searchBarContainerStyle}
-                                inputStyle={styles.searchBarInputStyle}
-                                onChangeText={(text) => this.onChangeSearchTerm(text)}
-                                placeholder={SEARCH_PLACEHOLDER[language]}
-                            />
-                        }
-                    </View>
+                :
+                <View style={styles.mainHeaderStyle}>
+                    <View style={{ flex: 1 }}/>
+                    <Text style={styles.headerTitleStyle}>{HEADER_TITLE[language]}</Text>
+                    <Icon
+                        style={{ flex: 1 }}
+                        name='search'
+                        size={34}
+                        color='white'
+                        underlayColor='#01579b'
+                        containerStyle={{
+                            padding: 5,
+                            marginTop: TOP_PADDING,
+                            marginRight: 5
+                        }}
+                        onPress={() => this.displaySearchBar()}
+                    />
+                </View>
+        );
+    
+        const topLevelQuestions = Object.keys(questions).filter((key) => {
+            return questions[key].previous === null && questions[key].subject[language].toLowerCase().includes(this.state.searchTerm.trim().toLowerCase());
+        });
+        
+        const content = (
+            !_.isEmpty(currentQuestion) ?
+                <View>
+                    <Text style={styles.titleTextStyle}>{currentQuestion.question[language]}</Text>
+                    {
+                        (!_.isNil(currentQuestion.images) && _.size(currentQuestion.images) > 0) &&
+                        <ImageGallery images={currentQuestion.images} />
+                    }
+                    {
+                        (!_.isNil(currentQuestion.description) && _.size(currentQuestion.description) > 0) &&
+                        <Text style={styles.descriptionStyle}>{currentQuestion.description[language]}</Text>
+                    }
+                    <ScrollView style={styles.optionListStyle}>
+                        {this.renderOptions()}
+                    </ScrollView>
+                </View>
+                :
+                <View>
                     <View style={styles.titleStyle}>
                         <Text style={styles.titleTextStyle}>{TOPIC_TITLE[language]}</Text>
                     </View>
                     <ScrollView>
                         {this.renderTopLevelQuestions(topLevelQuestions)}
                     </ScrollView>
-                    <TabBar />
                 </View>
-            )
-        }
+        );
+        
+        return (
+            <View style={{ flex: 1 }}>
+                {header}
+                {
+                    _.isEmpty(currentQuestion) &&
+                        <Animated.View
+                            style={{ zIndex: -1, transform: [ { translateY: this.animatedSearchBar }]}}
+                        >
+                            {
+                                !this.state.searchBarHidden &&
+                                <SearchBar
+                                    lightTheme
+                                    containerStyle={styles.searchBarContainerStyle}
+                                    inputStyle={styles.searchBarInputStyle}
+                                    onChangeText={(text) => this.onChangeSearchTerm(text)}
+                                    placeholder={SEARCH_PLACEHOLDER[language]}
+                                />
+                            }
+                        </Animated.View>
+                }
+                <Animated.View style={{ flex: 1, transform: [ { translateX: this.animatedNextScreen }]}}>
+                    {content}
+                </Animated.View>
+                <TabBar />
+            </View>
+        );
     }
 }
 
@@ -281,8 +347,9 @@ const styles = {
         fontSize: 16,
         fontWeight: 'bold',
         color: 'white',
-        marginRight: 10,
-        paddingTop: TOP_PADDING
+        padding: 5,
+        marginRight: 5,
+        marginTop: TOP_PADDING
     },
     searchBarContainerStyle: {
         backgroundColor: '#01579b'
