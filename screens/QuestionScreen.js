@@ -165,6 +165,8 @@ class QuestionScreen extends Component {
         const { current, language, questions } = this.props;
         const { currentQuestion } = current;
         
+        console.log('SCREEN HEIGHT', SCREEN_HEIGHT);
+        
         const header = (
             !_.isEmpty(currentQuestion) ?
                 <View style={styles.headerStyle}>
@@ -215,7 +217,7 @@ class QuestionScreen extends Component {
         
         const content = (
             !_.isEmpty(currentQuestion) ?
-                <View>
+                <View style={{ flex: 1 }}>
                     <Text style={styles.titleTextStyle}>{currentQuestion.question[language]}</Text>
                     {
                         (!_.isNil(currentQuestion.images) && _.size(currentQuestion.images) > 0) &&
@@ -230,7 +232,7 @@ class QuestionScreen extends Component {
                     </ScrollView>
                 </View>
                 :
-                <View>
+                <View style={{ flex: 1 }}>
                     <View style={styles.titleStyle}>
                         <Text style={styles.titleTextStyle}>{TOPIC_TITLE[language]}</Text>
                     </View>
@@ -312,7 +314,8 @@ const styles = {
         fontSize: 26,
         color: 'white',
         fontWeight: 'bold',
-        textAlign: 'center'
+        textAlign: 'center',
+        marginLeft: 15
     },
     titleStyle: {
         width: SCREEN_WIDTH,
@@ -341,7 +344,8 @@ const styles = {
         paddingBottom: 10
     },
     optionListStyle: {
-        marginTop: 15
+        marginTop: 15,
+        zIndex: -2
     },
     startOverStyle: {
         fontSize: 16,

@@ -5,6 +5,7 @@ import ImageViewer from './ImageViewer';
 import ImageOverlay from './ImageOverlay';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 // touchablewithoutfeedback wrapper
 const TouchableWithoutFeedbackForCompositeComponents = ({onPress, children}) =>
@@ -65,7 +66,7 @@ class ImageGallery extends Component {
                             ...this.state.images,
                             {
                                 key: image,
-                                source: { uri: image, cache: 'force-cache' },
+                                source: { uri: image },
                                 width,
                                 height
                             }
@@ -146,8 +147,8 @@ const styles = {
         width: SCREEN_WIDTH
     },
     thumbnailStyle: {
-        height: 200,
-        width: 300
+        height: SCREEN_HEIGHT < 600 ? 100 : 200,
+        width: SCREEN_HEIGHT < 600 ? 150 : 300
     },
     dotsStyle: {
         flexDirection: 'row',

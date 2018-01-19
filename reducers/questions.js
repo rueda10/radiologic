@@ -243,7 +243,7 @@ export default {
         ],
         tags: [],
         images: [
-            'https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination_cerebellar-peduncles.jpeg',
+            'https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination/pediatric-myelination_cerebellar-peduncles.jpeg',
         ],
         previous: 'pediatric-myelination'
     },
@@ -272,7 +272,7 @@ export default {
             }
         ],
         tags: [],
-        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination_dorsal-brainstem.jpeg'],
+        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination/pediatric-myelination_dorsal-brainstem.jpeg'],
         previous: 'pediatric-myelination > 01'
     },
     'pediatric-myelination > 01 > 02 > preterm': {
@@ -300,7 +300,7 @@ export default {
             }
         ],
         tags: [],
-        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination_posterior-limb-internal-capsule.jpeg'],
+        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination/pediatric-myelination_posterior-limb-internal-capsule.jpeg'],
         previous: 'pediatric-myelination > 01 > 02'
     },
     'pediatric-myelination > 01 > 02 > 03 > preterm': {
@@ -329,7 +329,7 @@ export default {
             }
         ],
         tags: [],
-        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination_perirolandic-white-matter.jpeg'],
+        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination/pediatric-myelination_perirolandic-white-matter.jpeg'],
         previous: 'pediatric-myelination > 01 > 02 > 03'
     },
     'pediatric-myelination > 01 > 02 > 03 > 04 > preterm': {
@@ -357,7 +357,7 @@ export default {
             }
         ],
         tags: [],
-        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination_anterior-limb-internal-capsule.jpeg'],
+        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination/pediatric-myelination_anterior-limb-internal-capsule.jpeg'],
         previous: 'pediatric-myelination > 01 > 02 > 03 > 04'
     },
     'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > term': {
@@ -385,7 +385,7 @@ export default {
             }
         ],
         tags: [],
-        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination_splenium-corpus-callosum.jpeg'],
+        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination/pediatric-myelination_splenium-corpus-callosum.jpeg'],
         previous: 'pediatric-myelination > 01 > 02 > 03 > 04 > 05'
     },
     'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06 > 2-3 months': {
@@ -413,7 +413,7 @@ export default {
             }
         ],
         tags: [],
-        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination_genu-corpus-callosum.jpeg'],
+        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination/pediatric-myelination_genu-corpus-callosum.jpeg'],
         previous: 'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06'
     },
     'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06 > 07 > 3-4 months': {
@@ -429,7 +429,8 @@ export default {
         previous: 'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06 > 07'
     },
     'pediatric-myelination-T2': {
-        question: ['Now switch to T2 sequence. Remember, myelination appears dark relative to grey matter.'],
+        question: ['Switch to T2 sequence'],
+        description: ['Remember, myelination appears dark relative to grey matter.'],
         options: [
             {
                 option: ['Next', ''],
@@ -453,7 +454,7 @@ export default {
             }
         ],
         tags: [],
-        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination_t2-genu-corpus-callosum.jpeg'],
+        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination/pediatric-myelination_t2-genu-corpus-callosum.jpeg'],
         previous: 'pediatric-myelination-T2'
     },
     'pediatric-myelination-T2 > 01 > 4-6 months': {
@@ -481,7 +482,7 @@ export default {
             }
         ],
         tags: [],
-        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination_t2-anterior-limb-internal-capsule.jpeg'],
+        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination/pediatric-myelination_t2-anterior-limb-internal-capsule.jpeg'],
         previous: 'pediatric-myelination-T2 > 01'
     },
     'pediatric-myelination-T2 > 01 > 02 > 5-8 months': {
@@ -535,7 +536,7 @@ export default {
         tags: [],
         images: [],
         previous: 'pediatric-myelination-T2 > 01 > 02 > 03'
-    },
+    }/*,
     'cystic-sellar-mass': {
         question: ['Where is it located?', 'TEST'],
         subject: ['Cystic sellar mass: differentiating between cystic pituitary adenoma and rathe cleft cyst', 'TEST3'],
@@ -745,5 +746,5 @@ export default {
         tags: ['abnormal', 'attenuation'],
         images: [],
         previous: 'cystic-sellar-mass > off-midline > no > no'
-    }
+    }*/
 };
