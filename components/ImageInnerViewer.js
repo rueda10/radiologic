@@ -559,7 +559,6 @@ const styles = {
         flex: 1
     },
     outerViewer: {
-        position: 'relative',
         left: 0,
         height: SCREEN_HEIGHT,
         width: SCREEN_WIDTH

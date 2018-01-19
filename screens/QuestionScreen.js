@@ -19,7 +19,7 @@ const TABBAR_HEIGHT = SCREEN_HEIGHT === 812 ? 88 : 65;
 const TOP_PADDING = SCREEN_HEIGHT === 812 ? 35 : 25;
 
 const HEADER_TITLE = ['Home', 'Inicio'];
-const TOPIC_TITLE = ['Choose a topic to begin', 'Escoge un tema para empezar'];
+const TOPIC_TITLE = ['CHOOSE A TOPIC', 'ESCOGE UN TEMA'];
 const STARTOVER_LABEL = ['START OVER', 'REINICIAR'];
 const SEARCH_PLACEHOLDER = ['Search topics...', 'Busca temas...'];
 
@@ -114,7 +114,7 @@ class QuestionScreen extends Component {
         if (!_.isEmpty(current)) {
             // ALGORITHM SCREENS
             return (
-                <View style={{ flex: 1, flexDirection: 'column' }}>
+                <View style={{ flex: 1 }}>
                     <View style={styles.headerStyle}>
                         <Icon
                             name='navigate-before'
@@ -137,18 +137,20 @@ class QuestionScreen extends Component {
                             </Text>
                         }
                     </View>
-                    <Text style={styles.titleTextStyle}>{current.question[language]}</Text>
-                    {
-                        (!_.isNil(current.description) && _.size(current.description) > 0) &&
-                        <Text style={styles.descriptionStyle}>{current.description[language]}</Text>
-                    }
-                    {
-                        (!_.isNil(current.images) && _.size(current.images) > 0) &&
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.titleTextStyle}>{current.question[language]}</Text>
+                        {
+                            (!_.isNil(current.images) && _.size(current.images) > 0) &&
                             <ImageGallery images={current.images} />
-                    }
-                    <ScrollView style={styles.optionListStyle}>
-                        {this.renderOptions()}
-                    </ScrollView>
+                        }
+                        {
+                            (!_.isNil(current.description) && _.size(current.description) > 0) &&
+                            <Text style={styles.descriptionStyle}>{current.description[language]}</Text>
+                        }
+                        <ScrollView style={styles.optionListStyle}>
+                            {this.renderOptions()}
+                        </ScrollView>
+                    </View>
                     <TabBar />
                 </View>
             );
@@ -269,6 +271,7 @@ const styles = {
         fontSize: 14,
         paddingLeft: 10,
         paddingRight: 10,
+        paddingTop: 10,
         paddingBottom: 10
     },
     optionListStyle: {

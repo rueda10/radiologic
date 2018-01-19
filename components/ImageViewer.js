@@ -43,12 +43,13 @@ class ImageViewerImage extends Component {
         const { style, image } = this.props;
         const { opacity } = this.state;
         
+        const aspectRatio = image.width / image.height;
+        
         return (
             <Animated.Image
                 style={[style, { opacity }]}
                 source={image.source}
-                resizeMode={image.width < 300 && image.height < 434 ? 'contain' : 'cover'}
-                // resizeMode='contain'
+                resizeMode={ aspectRatio > 0.461 && aspectRatio < 1.5 ? 'contain' : 'cover'}
                 ref={im => {
                     this._imageRef = im;
                 }}

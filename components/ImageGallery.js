@@ -37,13 +37,14 @@ class ImageGallery extends Component {
     
     componentWillMount() {
         this.props.images.map(image => {
+            Image.prefetch(image);
             Image.getSize(image, (width, height) => {
                 this.setState({
                     images: [
                         ...this.state.images,
                         {
                             key: image,
-                            source: { uri: image, cache: 'force-cache' },
+                            source: { uri: image },
                             width,
                             height
                         }

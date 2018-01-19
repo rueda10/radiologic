@@ -65,7 +65,7 @@ class ImagePane extends Component {
                 }}
             >
                 <Animated.View style={[styles.innerPane, { width, height }]}>
-                    {this._getImage()}
+                    {this._getPinchToZoom()}
                 </Animated.View>
             </Animated.View>
         );
@@ -134,7 +134,7 @@ class ImagePane extends Component {
         )
     }
 }
-
+        
 const styles = {
     innerPane: {
         justifyContent: 'center',

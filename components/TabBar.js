@@ -67,10 +67,6 @@ class TabBar extends Component {
 
 const styles = {
     tabBarStyle: {
-        position: 'relative',
-        bottom: 0,
-        left: 0,
-        right: 0,
         alignSelf: 'stretch',
         alignItems: 'center',
         height: TAB_BAR_HEIGHT,
@@ -83,8 +79,7 @@ const styles = {
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 2,
-        elevation: 2,
-        zIndex: 0
+        zIndex: -1
     },
     iconStyle: {
         marginLeft: iconMargin,

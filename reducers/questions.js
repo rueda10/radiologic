@@ -1,5 +1,5 @@
 export default {
-    'abnormal-attenuation-head-ct': {
+    /*'abnormal-attenuation-head-ct': {
         question: ['Is there any abnormal attenuation?', 'TEST'],
         subject: ['Abnormal attenuation on head CT', 'TEST'],
         description: ['Abnormal attenuation happens when guere guere guere and when there is some guere guere guere.', 'TEST'],
@@ -214,13 +214,14 @@ export default {
         tags: ['abnormal', 'attenuation'],
         images: [],
         previous: 'abnormal-attenuation-head-ct'
-    },
+    },*/
     'pediatric-myelination': {
-        question: ['Begin with your T1 sequence. Myelination on T1 appears bright relative to grey matter.', 'TEST2'],
+        question: ['Pediatric Myelination'],
+        description: ['Begin with your T1 sequence. Myelination on T1 appears bright relative to grey matter.', 'TEST2'],
         subject: ['Pediatric myelination', 'TEST2'],
         options: [
             {
-                option: ['Next', 'Siguiente'],
+                option: ['Begin', 'Empezar'],
                 next: 'pediatric-myelination > 01'
             }
         ],
@@ -241,7 +242,9 @@ export default {
             }
         ],
         tags: [],
-        images: [],
+        images: [
+            'https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination_cerebellar-peduncles.jpeg',
+        ],
         previous: 'pediatric-myelination'
     },
     'pediatric-myelination > 01 > preterm': {
@@ -269,7 +272,7 @@ export default {
             }
         ],
         tags: [],
-        images: [],
+        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination_dorsal-brainstem.jpeg'],
         previous: 'pediatric-myelination > 01'
     },
     'pediatric-myelination > 01 > 02 > preterm': {
@@ -297,7 +300,7 @@ export default {
             }
         ],
         tags: [],
-        images: [],
+        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination_posterior-limb-internal-capsule.jpeg'],
         previous: 'pediatric-myelination > 01 > 02'
     },
     'pediatric-myelination > 01 > 02 > 03 > preterm': {
@@ -314,6 +317,7 @@ export default {
     },
     'pediatric-myelination > 01 > 02 > 03 > 04': {
         question: ['Is the peri-Rolandic white matter myelinated?'],
+        description: ['Axial T1 weighted image shows the central sulci of Rolando bilaterally (arrows) and the white matter adjacent to the central sulcus is termed the perirolandic white matter (dashed ovals).'],
         options: [
             {
                 option: ['Yes', 'Si'],
@@ -325,8 +329,8 @@ export default {
             }
         ],
         tags: [],
-        images: [],
-        previous: 'pediatric-myelination-03'
+        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination_perirolandic-white-matter.jpeg'],
+        previous: 'pediatric-myelination > 01 > 02 > 03'
     },
     'pediatric-myelination > 01 > 02 > 03 > 04 > preterm': {
         question: ['This myelination pattern suggests:'],
@@ -353,7 +357,7 @@ export default {
             }
         ],
         tags: [],
-        images: [],
+        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination_anterior-limb-internal-capsule.jpeg'],
         previous: 'pediatric-myelination > 01 > 02 > 03 > 04'
     },
     'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > term': {
@@ -381,7 +385,7 @@ export default {
             }
         ],
         tags: [],
-        images: [],
+        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination_splenium-corpus-callosum.jpeg'],
         previous: 'pediatric-myelination > 01 > 02 > 03 > 04 > 05'
     },
     'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06 > 2-3 months': {
@@ -409,7 +413,7 @@ export default {
             }
         ],
         tags: [],
-        images: [],
+        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination_genu-corpus-callosum.jpeg'],
         previous: 'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06'
     },
     'pediatric-myelination > 01 > 02 > 03 > 04 > 05 > 06 > 07 > 3-4 months': {
@@ -449,7 +453,7 @@ export default {
             }
         ],
         tags: [],
-        images: [],
+        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination_t2-genu-corpus-callosum.jpeg'],
         previous: 'pediatric-myelination-T2'
     },
     'pediatric-myelination-T2 > 01 > 4-6 months': {
@@ -477,7 +481,7 @@ export default {
             }
         ],
         tags: [],
-        images: [],
+        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination_t2-anterior-limb-internal-capsule.jpeg'],
         previous: 'pediatric-myelination-T2 > 01'
     },
     'pediatric-myelination-T2 > 01 > 02 > 5-8 months': {
