@@ -123,8 +123,6 @@ class ImageViewer extends Component {
     
     measureComponent() {
         this.refs.viewer.measure((ox, oy, width, height, px, py) => {
-            console.log("HEIGHT", height);
-            console.log("PY", py);
             this.setState({
                 topOffset: height + py
             })

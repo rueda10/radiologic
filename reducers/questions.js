@@ -230,7 +230,7 @@ export default {
         previous: null
     },
     'pediatric-myelination > 01': {
-        question: ['Are at least the medial aspects of the middle cerebellar peduncles myelinated?'],
+        question: ['Are at least the medial aspects of the middle cerebellar peduncles myelinated?', 'Espanol test'],
         options: [
             {
                 option: ['Yes', 'Si'],
