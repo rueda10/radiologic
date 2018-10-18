@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, View, FlatList, ScrollView, Dimensions, Animated, TouchableWithoutFeedback } from 'react-native';
+import { Image, View, FlatList, Platform, Dimensions, Animated, TouchableWithoutFeedback } from 'react-native';
 
 import ImageViewer from './ImageViewer';
 import ImageOverlay from './ImageOverlay';
@@ -121,7 +121,7 @@ class ImageGallery extends Component {
                                         key={item.key}
                                         item={item}
                                         images={this.state.images}
-                                        onImageOpen={onImageOpen}
+                                        onImageOpen={Platform.OS === 'ios' ? onImageOpen : () => {}}
                                     />
                                 )
                             }}

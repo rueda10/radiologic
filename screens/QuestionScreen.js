@@ -13,14 +13,14 @@ import ImageGallery from '../components/ImageGallery';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-const HEADER_HEIGHT = SCREEN_HEIGHT === 812 ? 88 : 65;
+const HEADER_HEIGHT = SCREEN_HEIGHT >= 812 ? SCREEN_HEIGHT * 0.11 : SCREEN_HEIGHT * 0.10;
 const TABBAR_HEIGHT = SCREEN_HEIGHT === 812 ? 88 : 65;
 
-const TOP_PADDING = SCREEN_HEIGHT === 812 ? 30 : 20;
+const TOP_PADDING = HEADER_HEIGHT * 0.30;
 
 const HEADER_TITLE = ['Home', 'Inicio'];
 const TOPIC_TITLE = ['CHOOSE A TOPIC', 'ESCOGE UN TEMA'];
-const STARTOVER_LABEL = ['START OVER', 'REINICIAR'];
+const STARTOVER_LABEL = ['RESTART', 'REINICIAR'];
 const SEARCH_PLACEHOLDER = ['Search topics...', 'Busca temas...'];
 
 class QuestionScreen extends Component {
@@ -169,7 +169,7 @@ class QuestionScreen extends Component {
         
         const header = (
             !_.isEmpty(currentQuestion) ?
-                <View style={styles.headerStyle}>
+                <Animated.View style={styles.headerStyle}>
                     <Icon
                         name='navigate-before'
                         size={34}
@@ -190,9 +190,9 @@ class QuestionScreen extends Component {
                             {STARTOVER_LABEL[language]}
                         </Text>
                     }
-                </View>
+                </Animated.View>
                 :
-                <View style={styles.mainHeaderStyle}>
+                <Animated.View style={styles.mainHeaderStyle}>
                     <View style={{ flex: 1 }}/>
                     <Text style={styles.headerTitleStyle}>{HEADER_TITLE[language]}</Text>
                     <Icon
@@ -208,7 +208,7 @@ class QuestionScreen extends Component {
                         }}
                         onPress={() => this.displaySearchBar()}
                     />
-                </View>
+                </Animated.View>
         );
     
         const topLevelQuestions = Object.keys(questions).filter((key) => {
@@ -218,7 +218,7 @@ class QuestionScreen extends Component {
         const content = (
             !_.isEmpty(currentQuestion) ?
                 <View style={{ flex: 1 }}>
-                    <Text style={styles.titleTextStyle}>{currentQuestion.question[language]}</Text>
+                    <Text style={[styles.titleTextStyle]}>{currentQuestion.question[language]}</Text>
                     {
                         (!_.isNil(currentQuestion.images) && _.size(currentQuestion.images) > 0) &&
                         <ImageGallery images={currentQuestion.images} />
@@ -227,9 +227,9 @@ class QuestionScreen extends Component {
                         (!_.isNil(currentQuestion.description) && _.size(currentQuestion.description) > 0) &&
                         <Text style={styles.descriptionStyle}>{currentQuestion.description[language]}</Text>
                     }
-                    <ScrollView style={styles.optionListStyle}>
+                    <Animated.ScrollView style={styles.optionListStyle}>
                         {this.renderOptions()}
-                    </ScrollView>
+                    </Animated.ScrollView>
                 </View>
                 :
                 <View style={{ flex: 1 }}>
@@ -243,7 +243,7 @@ class QuestionScreen extends Component {
         );
         
         return (
-            <View style={{ flex: 1 }}>
+            <Animated.View style={{ flex: 1, opacity: this.animInverseZoomVal }}>
                 {header}
                 {
                     _.isEmpty(currentQuestion) &&
@@ -266,7 +266,7 @@ class QuestionScreen extends Component {
                     {content}
                 </Animated.View>
                 <TabBar />
-            </View>
+            </Animated.View>
         );
     }
 }
@@ -328,7 +328,7 @@ const styles = {
         textAlign: 'center',
         color: '#01579b',
         fontWeight: '800',
-        fontSize: 25,
+        fontSize: 22,
         paddingLeft: 10,
         paddingRight: 10,
         paddingTop: 10,
@@ -348,7 +348,7 @@ const styles = {
         zIndex: -2
     },
     startOverStyle: {
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: 'bold',
         color: 'white',
         padding: 5,

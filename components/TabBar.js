@@ -11,8 +11,8 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const ICON_SIZE = 30;
 const iconMargin = (SCREEN_WIDTH / 2 - ICON_SIZE) / 2;
-const iconPadding = SCREEN_HEIGHT === 812 ? 25 : 0;
-const TAB_BAR_HEIGHT = SCREEN_HEIGHT === 812 ? 84 : 64;
+const TAB_BAR_HEIGHT = SCREEN_HEIGHT * 0.10;
+const iconPadding = SCREEN_HEIGHT >= 812 ? TAB_BAR_HEIGHT * 0.30 : 0;
 
 // ACTIONSHEET INDEX
 const CANCEL_INDEX = 2;

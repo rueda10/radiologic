@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, StatusBar, View } from 'react-native';
-import { TabNavigator, StackNavigator } from 'react-navigation';
+import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
+import { BottomTabBar } from 'react-navigation-tabs';
 import { Provider } from 'react-redux';
 
 import store from './store';
@@ -10,12 +11,12 @@ import WelcomeScreen from './screens/WelcomeScreen';
 
 export default class App extends React.Component {
     render() {
-        const MainNavigator = TabNavigator({
+        const MainNavigator = createBottomTabNavigator({
             welcome: { screen: WelcomeScreen },
             main: {
-                screen: TabNavigator({
+                screen: createBottomTabNavigator({
                     question: {
-                        screen: StackNavigator({
+                        screen: createStackNavigator({
                             questions: {
                                 screen: QuestionScreen
                             }

@@ -123,6 +123,8 @@ class ImageViewer extends Component {
     
     measureComponent() {
         this.refs.viewer.measure((ox, oy, width, height, px, py) => {
+            console.log("HEIGHT", height);
+            console.log("PY", py);
             this.setState({
                 topOffset: height + py
             })
@@ -134,7 +136,10 @@ class ImageViewer extends Component {
         const { renderOverlay } = this.props;
         
         return (
-            <View ref='viewer'>
+            <View
+                ref='viewer'
+                renderToHardwareTextureAndroid={true}
+            >
                 {this.props.renderContent({onImageOpen: this.open})}
                 {images &&
                     <ImageInnerViewer

@@ -230,7 +230,7 @@ export default {
         previous: null
     },
     'pediatric-myelination > 01': {
-        question: ['Is the middle cerebellar peduncle myelinated?'],
+        question: ['Are at least the medial aspects of the middle cerebellar peduncles myelinated?'],
         options: [
             {
                 option: ['Yes', 'Si'],
@@ -243,7 +243,7 @@ export default {
         ],
         tags: [],
         images: [
-            'https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination/pediatric-myelination_cerebellar-peduncles.jpeg',
+            'https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination/pediatric-myelination_cerebellar-peduncles.jpeg'
         ],
         previous: 'pediatric-myelination'
     },
@@ -364,7 +364,7 @@ export default {
         question: ['This myelination pattern suggests:'],
         options: [
             {
-                option: ['Term infant', ''],
+                option: ['Term infant less than 2 months of age', ''],
                 next: null
             }
         ],
@@ -498,11 +498,11 @@ export default {
         previous: 'pediatric-myelination-T2 > 01 > 02'
     },
     'pediatric-myelination-T2 > 01 > 02 > 03': {
-        question: ['Is the peripheral frontal white matter myelinated?'],
+        question: ['Is the central frontal white matter myelinated?'],
         options: [
             {
                 option: ['Yes', 'Si'],
-                next: 'pediatric-myelination-T2 > 01 > 02 > 03 > 14-18 months'
+                next: 'pediatric-myelination-T2 > 01 > 02 > 03 > 04'
             },
             {
                 option: ['No', 'No'],
@@ -510,7 +510,7 @@ export default {
             }
         ],
         tags: [],
-        images: [],
+        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination/pediatric-myelination_central-frontal-white-matter.jpg'],
         previous: 'pediatric-myelination-T2 > 01 > 02'
     },
     'pediatric-myelination-T2 > 01 > 02 > 03 > 7-11 months': {
@@ -525,18 +525,76 @@ export default {
         images: [],
         previous: 'pediatric-myelination-T2 > 01 > 02 > 03'
     },
-    'pediatric-myelination-T2 > 01 > 02 > 03 > 14-18 months': {
-        question: ['This myelination pattern suggests:'],
+    'pediatric-myelination-T2 > 01 > 02 > 03 > 04': {
+        question: ['Are the Subcortical U-fibers of the frontal lobes myelinated?'],
         options: [
             {
-                option: ['Infant at least between 14-18 months of age', ''],
-                next: null
+                option: ['Yes', 'Si'],
+                next: 'pediatric-myelination-T2 > 01 > 02 > 03 > 04 > 05'
+            },
+            {
+                option: ['No', 'No'],
+                next: 'pediatric-myelination-T2 > 01 > 02 > 03 > 04 > 11-16 months'
             }
         ],
         tags: [],
-        images: [],
+        images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination/pediatric-myelination_subcortial-u-fibers-frontal-lobes.jpg'],
         previous: 'pediatric-myelination-T2 > 01 > 02 > 03'
-    }/*,
+    },
+    'pediatric-myelination-T2 > 01 > 02 > 03 > 04 > 11-16 months': {
+    question: ['This myelination pattern suggests:'],
+    options: [
+      {
+        option: ['Child between 11-16 months of age', ''],
+        next: null
+      }
+    ],
+    tags: [],
+    images: [],
+    previous: 'pediatric-myelination-T2 > 01 > 02 > 03 > 04'
+    },
+    'pediatric-myelination-T2 > 01 > 02 > 03 > 04 > 05': {
+    question: ['Are the Subcortical U-Fibers of the temporal lobes myelinated?'],
+    options: [
+      {
+        option: ['Yes', 'Si'],
+        next: 'pediatric-myelination-T2 > 01 > 02 > 03 > 04 > 05 > at-least-24'
+      },
+      {
+        option: ['No', 'No'],
+        next: 'pediatric-myelination-T2 > 01 > 02 > 03 > 04 > 05 > 16-24 months'
+      }
+    ],
+    tags: [],
+    images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination/pediatric-myelination_subcortial-u-fibers-temporal-lobes.jpg'],
+    previous: 'pediatric-myelination-T2 > 01 > 02 > 03 > 04'
+    },
+    'pediatric-myelination-T2 > 01 > 02 > 03 > 04 > 05 > at-least-24': {
+    question: ['This myelination pattern suggests:'],
+    description: ['After 24 months of age, myelination is similar to an adult. Terminal zones of myelination may persist until the second decade of life, and appear as hyperintense areas in the periatrial white matter.'],
+    options: [
+      {
+        option: ['Child at least 24 months of age.', ''],
+        next: null
+      }
+    ],
+    tags: [],
+    images: ['https://s3-us-west-2.amazonaws.com/radiologic/pediatric-myelination/pediatric-myelination_24m-adult.jpg'],
+    previous: 'pediatric-myelination-T2 > 01 > 02 > 03 > 04 > 05'
+    },
+    'pediatric-myelination-T2 > 01 > 02 > 03 > 04 > 05 > 16-24 months': {
+    question: ['This myelination pattern suggests:'],
+    options: [
+      {
+        option: ['Child between 16-24 months of age', ''],
+        next: null
+      }
+    ],
+    tags: [],
+    images: [],
+    previous: 'pediatric-myelination-T2 > 01 > 02 > 03 > 04 > 05'
+    }
+    /*,
     'cystic-sellar-mass': {
         question: ['Where is it located?', 'TEST'],
         subject: ['Cystic sellar mass: differentiating between cystic pituitary adenoma and rathe cleft cyst', 'TEST3'],
